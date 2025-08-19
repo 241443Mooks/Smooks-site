@@ -1,0 +1,37 @@
+import { defineCollection, z } from "astro:content";
+
+const wins = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    date: z.coerce.date(),
+    summary: z.string().max(220),
+    tags: z.array(z.string()).default([]),
+    role: z.string().optional(),
+    organisation: z.string().optional(),
+    outcomes: z.array(z.string()).optional(),
+    impact_metrics: z.array(z.object({
+      metric: z.string(),
+      before: z.string().optional(),
+      after: z.string().optional(),
+      estimate_hours: z.number().optional()
+    })).optional(),
+    links: z.array(z.object({
+      label: z.string(),
+      url: z.string().url()
+    })).optional(),
+    media: z.array(z.object({
+      src: z.string(),
+      alt: z.string(),
+      caption: z.string().optional()
+    })).optional(),
+    standards_alignment: z.object({
+      iso: z.array(z.string()).optional(),
+      frameworks: z.array(z.string()).optional(),
+      cmi_evidence: z.array(z.string()).optional()
+    }).optional()
+  }),
+});
+
+export const collections = { wins };
