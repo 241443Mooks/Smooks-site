@@ -4,7 +4,6 @@ const wins = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    slug: z.string(),
     date: z.coerce.date(),
     summary: z.string().max(220),
     tags: z.array(z.string()).default([]),

@@ -5,12 +5,10 @@ import { getCollection } from "astro:content";
 
 const { slug } = Astro.params;
 const entries = await getCollection("wins");
-const entry = entries.find(e => e.data.slug === slug);
-
+const entry = entries.find(e => e.slug === slug);  // <-- use e.slug (auto)
 if (!entry) throw new Error(`Win not found: ${slug}`);
 
-const { Content, headings } = await entry.render();
-
+const { Content } = await entry.render();
 const title = `${entry.data.title} — Systems Win`;
 const description = entry.data.summary || "Systems Win case study";
 ---
