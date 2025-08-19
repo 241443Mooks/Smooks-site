@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: focus ring helper for a11y */
+:where(a, button, input, select, textarea):focus-visible {
+  @apply outline-none ring-2 ring-offset-2;
+}
