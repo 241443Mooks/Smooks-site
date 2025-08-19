@@ -3,22 +3,19 @@ import Layout from "../../layouts/Layout.astro";
 import SEO from "../../components/SEO.astro";
 import { getCollection } from "astro:content";
 
-// Pre-generate all case-study pages at build time
 export async function getStaticPaths() {
   const entries = await getCollection("wins");
   return entries.map((entry) => ({
-    params: { slug: entry.slug },   // auto slug from filename
-    props: { entry },               // pass entry to the page
+    params: { slug: entry.slug },
+    props: { entry },
   }));
 }
 
-// Receive the `entry` injected by getStaticPaths
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-
 const title = `${entry.data.title} — Systems Win`;
 const description = entry.data.summary ?? "Systems Win case study";
-const currentPath = `/wins/${entry.slug}`;
+const currentPath = `/system-wins/${entry.slug}`;
 ---
 <Layout title={title} description={description} currentPath={currentPath}>
   <SEO title={title} description={description} />
