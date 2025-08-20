@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Astro } from "astro";
+
+// In future you can make playbooks a content collection.
+// For now, this is a placeholder dynamic route page.
+
+const { slug } = Astro.params;
+const title = `Playbook: ${slug}`;
+const description = `Detailed transformation playbook – ${slug}`;
+---
+<Layout {title} {description} currentPath={Astro.url.pathname}>
+  <section class="mx-auto max-w-4xl">
+    <a href="/playbooks" class="text-sm text-zinc-400 hover:underline">← Back to Playbooks</a>
+    <h1 class="mt-2 text-3xl md:text-4xl font-semibold">Playbook: {slug}</h1>
+
+    <p class="mt-4 text-zinc-400">
+      This is a placeholder for <code>{slug}</code>. You can convert this into a full MDX-driven system later.
+    </p>
+
+    <div class="mt-8 rounded-xl border border-white/10 p-6 text-zinc-300">
+      <p>
+        Content for <strong>{slug}</strong> will live here. In production you could:
+      </p>
+      <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
+        <li>Create a content collection <code>src/content/playbooks</code>.</li>
+        <li>Write MDX files with frontmatter for title, summary, etc.</li>
+        <li>Query them here and render with Astro’s <code>&lt;Content /&gt;</code> API.</li>
+      </ul>
+    </div>
+  </section>
+</Layout>
