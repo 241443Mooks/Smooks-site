@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getStreamBySlug, winsForStream } from "../../data/wins";
+import SystemWinsCard from "../../components/SystemWinsCard.astro";
+
+const { box } = Astro.params;
+const stream = getStreamBySlug(box!);
+
+if (!stream) {
+  throw new Error(`Unknown portfolio stream: ${box}`);
+}
+
+const wins = winsForStream(stream.name);
+const title = `${stream.name} – Portfolio`;
+const description = stream.blurb;
+---
+<Layout {title} {description} currentPath={Astro.url.pathname}>
+  <section class="mx-auto max-w-6xl">
+    <a href="/portfolio" class="text-sm text-zinc-400 hover:underline">← Back to Portfolio</a>
+    <h1 class="mt-2 text-3xl md:text-4xl font-semibold">{stream.name}</h1>
+    <p class="text-zinc-400 mt-2 max-w-3xl">{stream.blurb}</p>
+
+    {wins.length === 0 ? (
+      <div class="mt-8 rounded-xl border border-white/10 p-6 text-zinc-400">
+        No case studies tagged for this stream yet. Add entries in <code class="text-zinc-300">src/data/wins.ts</code> under <code class="text-zinc-300">WINS</code>.
+      </div>
+    ) : (
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {wins.map((w) => (
+          <SystemWinsCard
+            href={`/system-wins/${w.slug}`}
+            title={w.title}
+            year={w.year}
+            summary={w.summary}
+            sector={w.sector}
+            streams={w.streams}
+            tags={w.tags}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>

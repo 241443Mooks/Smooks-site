@@ -1,0 +1,27 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { STREAMS } from "../data/wins";
+const title = "Portfolio – 9-Box Transformation";
+const description = "Director-level transformation portfolio across strategy, governance, finance, people, operations, innovation, partnerships, EDI, and resilience.";
+---
+<Layout {title} {description} currentPath={Astro.url.pathname}>
+  <section class="mx-auto max-w-6xl">
+    <h1 class="text-3xl md:text-4xl font-semibold mb-6">9‑Box Transformation Portfolio</h1>
+    <p class="text-zinc-400 mb-8 max-w-3xl">
+      A director‑level view of capability across nine streams. Select a box to see the narrative and the most relevant case studies.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {STREAMS.map((s) => (
+        <a href={`/portfolio/${s.slug}`} class="group rounded-2xl border border-white/10 p-5 hover:border-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+          <h2 class="text-xl font-medium mb-2 group-hover:underline">{s.name}</h2>
+          <p class="text-sm text-zinc-400">{s.blurb}</p>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-10 text-sm text-zinc-500">
+      Tip: Each case study is tagged with one or more streams. Use this grid to browse by capability area; or see <a class="underline" href="/system-wins">all System Wins</a>.
+    </div>
+  </section>
+</Layout>
