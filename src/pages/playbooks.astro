@@ -1,7 +1,40 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const playbooks = await getCollection("playbooks");
+const title = "Playbooks";
+const description = "Reusable frameworks and checklists.";
 ---
-<Layout title="Playbooks — SMooks" description="Reusable frameworks like Rome vs Empire, RACI Hats, and more.">
-  <h1 class="text-3xl font-semibold mb-6">Playbooks</h1>
-  <p class="text-zinc-300">Playbooks coming soon.</p>
+<Layout {title} {description} currentPath={Astro.url.pathname}>
+  <section class="mx-auto max-w-6xl">
+    <h1 class="text-3xl md:text-4xl font-semibold">Playbooks</h1>
+    <p class="text-zinc-400 mt-2 max-w-3xl">Frameworks you can reuse across schools and sectors.</p>
+
+    {playbooks.length === 0 ? (
+      <div class="mt-8 rounded-xl border border-white/10 p-6 text-zinc-400">
+        No playbooks yet. Add MDX files under <code class="text-zinc-300">src/content/playbooks</code>.
+      </div>
+    ) : (
+      <ul class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {playbooks
+          .sort((a, b) => (b.data.date ?? "").localeCompare(a.data.date ?? ""))
+          .map((p) => (
+            <li class="rounded-2xl border border-white/10 p-5 hover:border-white/20">
+              <a class="block hover:underline" href={`/playbooks/${p.slug}`}>
+                <h2 class="text-lg font-medium">{p.data.title}</h2>
+                {p.data.summary && <p class="text-sm text-zinc-400 mt-1">{p.data.summary}</p>}
+              </a>
+              {p.data.tags?.length > 0 && (
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {p.data.tags.map((t: string) => (
+                    <span class="text-[11px] px-2 py-1 rounded-full bg-white/5 border border-white/10">{t}</span>
+                  ))}
+                </div>
+              )}
+            </li>
+          ))}
+      </ul>
+    )}
+  </section>
 </Layout>

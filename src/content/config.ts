@@ -33,4 +33,19 @@ const wins = defineCollection({
   }),
 });
 
-export const collections = { wins };
+
+const playbooks = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    date: z.string().optional(), // ISO date
+    summary: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = {
+  // keep existing collections here (e.g., wins, articles) if defined
+  playbooks, wins
+};

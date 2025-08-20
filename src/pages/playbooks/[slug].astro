@@ -1,32 +1,38 @@
 ---
+export const prerender = true;
+
 import Layout from "../../layouts/Layout.astro";
-import { Astro } from "astro";
+import { getCollection } from "astro:content";
 
-// In future you can make playbooks a content collection.
-// For now, this is a placeholder dynamic route page.
+export async function getStaticPaths() {
+  const entries = await getCollection("playbooks");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
 
-const { slug } = Astro.params;
-const title = `Playbook: ${slug}`;
-const description = `Detailed transformation playbook – ${slug}`;
+const { entry } = Astro.props as { entry: any };
+const { Content } = await entry.render();
+const title = entry.data.title ?? `Playbook: ${entry.slug}`;
+const description = entry.data.summary ?? "Reusable framework.";
 ---
 <Layout {title} {description} currentPath={Astro.url.pathname}>
-  <section class="mx-auto max-w-4xl">
+  <section class="mx-auto max-w-3xl">
     <a href="/playbooks" class="text-sm text-zinc-400 hover:underline">← Back to Playbooks</a>
-    <h1 class="mt-2 text-3xl md:text-4xl font-semibold">Playbook: {slug}</h1>
+    <h1 class="mt-2 text-3xl md:text-4xl font-semibold">{title}</h1>
+    {entry.data.summary && (<p class="mt-2 text-zinc-400">{entry.data.summary}</p>)}
 
-    <p class="mt-4 text-zinc-400">
-      This is a placeholder for <code>{slug}</code>. You can convert this into a full MDX-driven system later.
-    </p>
+    <article class="prose prose-invert max-w-none mt-8">
+      <Content />
+    </article>
 
-    <div class="mt-8 rounded-xl border border-white/10 p-6 text-zinc-300">
-      <p>
-        Content for <strong>{slug}</strong> will live here. In production you could:
-      </p>
-      <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
-        <li>Create a content collection <code>src/content/playbooks</code>.</li>
-        <li>Write MDX files with frontmatter for title, summary, etc.</li>
-        <li>Query them here and render with Astro’s <code>&lt;Content /&gt;</code> API.</li>
-      </ul>
-    </div>
+    {entry.data.tags?.length > 0 && (
+      <div class="mt-8 flex flex-wrap gap-2">
+        {entry.data.tags.map((t: string) => (
+          <span class="text-[11px] px-2 py-1 rounded-full bg-white/5 border border-white/10">{t}</span>
+        ))}
+      </div>
+    )}
   </section>
 </Layout>
