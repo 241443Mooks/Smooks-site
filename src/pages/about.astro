@@ -1,6 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
 ---
+{Astro.url.pathname === '/' || Astro.url.pathname.startsWith('/about') ? (
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context":"https://schema.org",
+      "@type":"Person",
+      name:"Sharron Mooks",
+      alternateName:"SMooks",
+      url:"https://smooks.co.uk/",
+      image:"https://smooks.co.uk/images/sharron.jpg",
+      jobTitle:"Education Systems & Transformation Lead",
+      sameAs:[
+        "https://www.linkedin.com/in/<your-handle>/",
+        "https://github.com/241443Mooks"
+      ]
+    })}
+  </script>
+) : null}
+
 <Layout title="About — SMooks" description="Sharron ‘SMooks’ Mooks — education systems & transformation.">
   <h1 class="text-3xl font-semibold mb-6">About</h1>
   <p class="text-zinc-300">Bio and media kit coming soon.</p>
