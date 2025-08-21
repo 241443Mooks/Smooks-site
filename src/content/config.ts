@@ -55,6 +55,7 @@ const articles = defineCollection({
     summary: z.string().optional(),
     tags: z.array(z.string()).default([]),
     canonical: z.string().url().optional(),
+    draft: z.boolean().default(false).optional(),
   }),
 });
 
