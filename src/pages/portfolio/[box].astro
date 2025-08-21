@@ -1,7 +1,16 @@
 ---
+// make sure this page is statically generated
+export const prerender = true;
+
 import Layout from "../../layouts/Layout.astro";
-import { getStreamBySlug, winsForStream } from "../../data/wins";
+import { getStreamBySlug, winsForStream, STREAMS } from "../../data/wins";
 import SystemWinsCard from "../../components/SystemWinsCard.astro";
+
+// 👇 ADD THIS
+export function getStaticPaths() {
+  // Expect STREAMS like: [{ slug: "strategy", name: "...", blurb: "..." }, ...]
+  return STREAMS.map((s) => ({ params: { box: s.slug } }));
+}
 
 const { box } = Astro.params;
 const stream = getStreamBySlug(box!);
@@ -22,7 +31,7 @@ const description = stream.blurb;
 
     {wins.length === 0 ? (
       <div class="mt-8 rounded-xl border border-white/10 p-6 text-zinc-400">
-        No case studies tagged for this stream yet. Add entries in <code class="text-zinc-300">src/data/wins.ts</code> under <code class="text-zinc-300">WINS</code>.
+        No case studies tagged for this stream yet.
       </div>
     ) : (
       <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
