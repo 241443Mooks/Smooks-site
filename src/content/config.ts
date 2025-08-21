@@ -51,7 +51,7 @@ const articles = defineCollection({
   schema: z.object({
     title: z.string(),
 //    slug: z.string(),
-    date: z.string().optional(),      // ISO date
+    date: z.coerce.date(),      // ISO date
     summary: z.string().optional(),
     tags: z.array(z.string()).default([]),
     canonical: z.string().url().optional(),
