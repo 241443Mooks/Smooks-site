@@ -29,7 +29,8 @@ const wins = defineCollection({
       iso: z.array(z.string()).optional(),
       frameworks: z.array(z.string()).optional(),
       cmi_evidence: z.array(z.string()).optional()
-    }).optional()
+    }).optional(),
+    draft: z.boolean().default(false).optional(),
   }),
 });
 
@@ -39,9 +40,10 @@ const playbooks = defineCollection({
   schema: z.object({
     title: z.string(),
 //    slug: z.string(),
-    date: z.string().optional(), // ISO date
+    date: z.coerce.date(), // ISO date
     summary: z.string().optional(),
     tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false).optional(),
   }),
 });
 
