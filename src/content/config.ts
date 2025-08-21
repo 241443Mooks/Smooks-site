@@ -38,7 +38,6 @@ const playbooks = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    slug: z.string(),
     date: z.string().optional(), // ISO date
     summary: z.string().optional(),
     tags: z.array(z.string()).default([]),
@@ -50,7 +49,6 @@ const articles = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    slug: z.string(),
     date: z.string().optional(),      // ISO date
     summary: z.string().optional(),
     tags: z.array(z.string()).default([]),
