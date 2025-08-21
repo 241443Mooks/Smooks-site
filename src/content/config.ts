@@ -45,12 +45,6 @@ const playbooks = defineCollection({
   }),
 });
 
-// src/content.config.ts
-import { defineCollection, z } from "astro:content";
-
-// …keep your existing collections…
-// e.g. const wins = defineCollection({...})
-// e.g. const playbooks = defineCollection({...})
 
 const articles = defineCollection({
   type: "content",
