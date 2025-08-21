@@ -18,3 +18,21 @@
       href="/writing/rss.xml" />
 }
 </script>
+---
+const base = Astro.site?.toString() ?? 'https://smooks.co.uk';
+const path = Astro.url.pathname.replace(/\/$/, ''); // drop trailing slash
+
+let ogPath = '/og/default.png'; // fallback (put a file at public/og/default.png)
+if (path.startsWith('/writing/')) ogPath = `/og${path}.png`;
+if (path.startsWith('/system-wins/')) ogPath = `/og${path}.png`;
+if (path.startsWith('/playbooks/')) ogPath = `/og${path}.png`;
+
+const ogUrl = new URL(ogPath, base).toString();
+---
+
+<!-- Open Graph -->
+<meta property="og:image" content={ogUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content={ogUrl} />
