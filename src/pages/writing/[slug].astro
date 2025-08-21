@@ -1,0 +1,41 @@
+---
+// src/pages/writing/[slug].astro
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  // returns [] if the collection exists but is empty — which is fine
+  const entries = await getCollection("articles");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const { Content } = await entry.render();
+
+const title = entry.data.title ?? `Article: ${entry.slug}`;
+const description = entry.data.summary ?? "Article";
+---
+<Layout {title} {description} currentPath={Astro.url.pathname}>
+  <section class="mx-auto max-w-3xl">
+    <a href="/writing" class="text-sm text-zinc-400 hover:underline">← Back to Writing</a>
+    <h1 class="mt-2 text-3xl md:text-4xl font-semibold">{title}</h1>
+    {entry.data.summary && <p class="mt-2 text-zinc-400">{entry.data.summary}</p>}
+
+    <article class="prose prose-invert max-w-none mt-8">
+      <Content />
+    </article>
+
+    {entry.data.tags?.length > 0 && (
+      <div class="mt-8 flex flex-wrap gap-2">
+        {entry.data.tags.map((t: string) => (
+          <span class="text-[11px] px-2 py-1 rounded-full bg-white/5 border border-white/10">{t}</span>
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>

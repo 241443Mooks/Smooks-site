@@ -45,7 +45,29 @@ const playbooks = defineCollection({
   }),
 });
 
+// src/content.config.ts
+import { defineCollection, z } from "astro:content";
+
+// …keep your existing collections…
+// e.g. const wins = defineCollection({...})
+// e.g. const playbooks = defineCollection({...})
+
+const articles = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    date: z.string().optional(),      // ISO date
+    summary: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    canonical: z.string().url().optional(),
+  }),
+});
+
+
+
+
 export const collections = {
   // keep existing collections here (e.g., wins, articles) if defined
-  playbooks, wins
+  playbooks, wins, articles
 };
