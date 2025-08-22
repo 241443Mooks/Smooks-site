@@ -62,13 +62,21 @@ const articles = defineCollection({
 });
 
 const writing = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    date: z.coerce.date(),    // ISO date
-    linkedin: z.string().url().optional(),
-    draft: z.boolean().optional(),
+  type: "content",
+  schema: z
+    .object({
+      title: z.string(),
+      description: z.string().max(300),
+      // Accept either `pubDate` or `date`
+      pubDate: z.coerce.date().optional(),
+      date: z.coerce.date().optional(),
+      tags: z.array(z.string()).default([]),
+      linkedin: z.string().url().optional(),
+      draft: z.boolean().optional().default(false),
+    })
+    .refine((d) => !!(d.pubDate || d.date), {
+      message: "Either `pubDate` or `date` is required",
+      path: ["pubDate"], // surfaces near the publish date fields
   }),
 });
 
