@@ -1,6 +1,7 @@
 ---
 // /src/pages/writing.astro
 import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
 
 const posts = (await getCollection("writing"))
   .filter((p) => !p.data.draft)
