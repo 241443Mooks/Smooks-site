@@ -84,3 +84,40 @@ a:hover { text-decoration: underline; }
 .card:hover { box-shadow: var(--elev-2); }
 
 a:visited { color: color-mix(in oklab, var(--c-link) 72%, #6b7280); }
+
+/* Focus: always visible, consistent in dark/light */
+:where(a, button, [role="button"], input, select, textarea, summary) {
+  outline: none;
+}
+:where(a, button, [role="button"], input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--focus-ring, currentColor);
+  outline-offset: 2px;
+}
+
+/* Skip link becomes visible when focused */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: .5rem 1rem;
+  background: var(--surface-elevated, #fff);
+  border: 1px solid var(--border, #ccc);
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visited links remain distinguishable */
+a:visited {
+  color: var(--link-visited, #5a3dc0);
+}
