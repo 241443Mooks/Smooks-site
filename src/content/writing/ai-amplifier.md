@@ -1,7 +1,7 @@
 ---
 title: "AI Isn’t the Answer — It’s an Amplifier"
 description: "AI doesn’t solve broken processes — it magnifies them. Leaders must design resilient systems before layering in automation."
-pubDate: 2025-08-22
+pubDate: "2025-08-22"
 tags: ["AI", "systems thinking", "automation", "leadership"]
 linkedin: "https://www.linkedin.com/pulse/ai-isnt-answerits-amplifier-sharron-mooks-wezhe"
 ---

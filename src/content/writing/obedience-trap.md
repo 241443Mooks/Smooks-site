@@ -1,7 +1,7 @@
 ---
 title: "The Obedience Trap — The Cost of Never Asking Why"
 description: "Blind obedience creates costly stagnation. Leaders must create cultures of questioning, agency, and intelligent challenge."
-pubDate: 2025-08-22
+pubDate: "2025-08-22"
 tags: ["leadership", "culture", "innovation", "questioning"]
 linkedin: "https://www.linkedin.com/pulse/obedience-trap-cost-never-asking-why-sharron-mooks-mquae"
 ---

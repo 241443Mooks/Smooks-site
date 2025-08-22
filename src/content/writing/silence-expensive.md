@@ -1,7 +1,7 @@
 ---
 title: "Silence is Expensive — Naming the Elephant Without Losing the Room"
 description: "Avoiding hard conversations carries hidden costs. Learn how to surface truths while preserving relationships and trust."
-pubDate: 2025-08-22
+pubDate: "2025-08-22"
 tags: ["leadership", "communication", "psychological safety", "trust"]
 linkedin: "https://www.linkedin.com/pulse/silence-expensive-how-name-elephant-without-losing-room-sharron-mooks-w15ee"
 ---

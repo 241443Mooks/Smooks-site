@@ -1,7 +1,7 @@
 ---
 title: "Beyond Compliance — Rebuilding Policy in the Age of AI"
 description: "Rethink policy design in the age of AI. Move beyond tick-box compliance to frameworks that balance risk, opportunity, and practical reality."
-pubDate: 2025-08-22
+pubDate: "2025-08-22"
 tags: ["AI", "policy", "governance", "compliance"]
 linkedin: "https://www.linkedin.com/pulse/beyond-compliance-rebuilding-policy-age-ai-sharron-mooks-sz7gc"
 ---

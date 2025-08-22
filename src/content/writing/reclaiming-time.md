@@ -1,7 +1,7 @@
 ---
 title: "Reclaiming Time — How Automation Can Revolutionise Work"
 description: "Automation isn’t about replacing people — it’s about giving them time back. Explore how to streamline repetitive tasks and unlock potential."
-pubDate: 2025-08-22
+pubDate: "2025-08-22"
 tags: ["automation", "workflow", "productivity", "transformation"]
 linkedin: "https://www.linkedin.com/pulse/reclaiming-time-how-automation-can-revolutionize-school-sharron-mooks-liuse"
 ---
