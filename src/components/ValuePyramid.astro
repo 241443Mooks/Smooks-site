@@ -1,0 +1,22 @@
+---
+const { base, middle, top } = Astro.props;
+---
+<section class="border-t border-gray-200 bg-white">
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:py-16">
+    <h2 class="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">Value Pyramid</h2>
+    <div class="mt-8 grid gap-4" aria-label="Three-tier value pyramid">
+      <div class="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+        <p class="text-gray-900 font-medium">Base</p>
+        <p class="mt-2 text-gray-700">{base}</p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-gray-100 p-6">
+        <p class="text-gray-900 font-medium">Middle</p>
+        <p class="mt-2 text-gray-700">{middle}</p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-gray-200 p-6">
+        <p class="text-gray-900 font-medium">Top</p>
+        <p class="mt-2 text-gray-800">{top}</p>
+      </div>
+    </div>
+  </div>
+</section>
