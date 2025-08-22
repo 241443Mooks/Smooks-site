@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary & Accent */
+  --brand-50:  #f4f7ff;
+  --brand-100: #e8efff;
+  --brand-300: #9fb7ff;
+  --brand-500: #395BFF;   /* Primary */
+  --brand-600: #2f4de0;
+  --brand-700: #253db4;
+  --brand-900: #1a2a73;
+
+  --accent-500: #00B5AD;  /* Teal accent */
+
+  /* Neutrals (light) */
+  --bg:        #ffffff;
+  --fg:        #0f172a;   /* slate-900 */
+  --muted:     #475569;   /* slate-600 */
+  --surface:   #f8fafc;   /* slate-50 */
+  --border:    color-mix(in oklab, var(--fg) 14%, transparent);
+
+  /* Semantic states */
+  --success-500: #10b981;
+  --warn-500:    #f59e0b;
+  --error-500:   #ef4444;
+
+  /* Semantics */
+  --c-primary: var(--brand-500);
+  --c-primary-contrast: #ffffff;
+  --c-link:    var(--brand-700);
+  --c-on-bg:   var(--fg);
+  --c-on-muted: var(--muted);
+  --c-surface: var(--surface);
+
+  /* Rounding / elevation / motion */
+  --radius-sm: .5rem;
+  --radius-md: .75rem;
+  --radius-lg: 1rem;
+  --elev-1: 0 1px 2px rgba(15,23,42,.06), 0 1px 1px rgba(15,23,42,.04);
+  --elev-2: 0 8px 24px rgba(15,23,42,.10);
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --dur-1: 150ms;
+  --dur-2: 240ms;
+
+  /* Type */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  --leading: 1.6;
+
+  /* Focus ring */
+  --focus: #7aa2ff; /* lighter primary for focus outline */
+  --ring: 0 0 0 3px color-mix(in oklab, var(--focus) 55%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1220;
+    --fg: #e2e8f0;
+    --muted: #9aa6b2;
+    --surface: #111827;
+    --border: color-mix(in oklab, var(--fg) 18%, transparent);
+
+    --c-primary: #7AA2FF;   /* lift for dark */
+    --c-link:    #A9BBFF;
+  }
+}
+
+/* Base elements */
+html { font-family: var(--font-sans); line-height: var(--leading); }
+h1,h2,h3 { line-height: 1.2; letter-spacing: -0.01em; }
+a { color: var(--c-link); text-underline-offset: 3px; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Utilities that Tailwind can’t express cleanly */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur-2) var(--ease);
+}
+.card:hover { box-shadow: var(--elev-2); }
+
+a:visited { color: color-mix(in oklab, var(--c-link) 72%, #6b7280); }
