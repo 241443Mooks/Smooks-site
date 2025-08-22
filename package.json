@@ -19,5 +19,14 @@
     "astro-og-canvas": "^0.7.0",
     "canvaskit-wasm": "^0.40.0",
     "sharp": "^0.34.3"
+  },
+  "pnpm": {
+    "allowedBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ],
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   }
 }

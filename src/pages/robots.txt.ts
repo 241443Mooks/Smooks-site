@@ -3,7 +3,8 @@ export function GET() {
   return new Response(
 `User-agent: *
 Allow: /
-Sitemap: https://smooks.co.uk/sitemap-index.xml`,
-    { headers: { 'Content-Type': 'text/plain' } }
+Sitemap: https://smooks.co.uk/sitemap-index.xml
+`,
+    { headers: { 'Content-Type': 'text/plain; charset=utf-8' } }
   );
 }
