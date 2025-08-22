@@ -8,30 +8,37 @@ import FeaturedPlaybook from "../components/FeaturedPlaybook.astro";
 import LatestWriting from "../components/LatestWriting.astro";
 import AboutSnapshot from "../components/AboutSnapshot.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import Container from "../components/ui/Container.astro";
 
-const safeGet = async (name) => {
-  try { return await getCollection(name); } catch (_) { return []; }
+// 🔒 Defensive wrapper so missing/empty collections never crash
+const safeGet = async (name: string) => {
+  try {
+    const items = await getCollection(name as any);
+    return Array.isArray(items) ? items : [];
+  } catch {
+    return [];
+  }
 };
 
 const writing = await safeGet('writing');
 const wins = await safeGet('wins');
 
 const posts = writing
-  .filter((p) => !p.data?.draft)
-  .sort((a, b) => +new Date(b.data?.date ?? 0) - +new Date(a.data?.date ?? 0))
+  .filter((p: any) => !p.data?.draft)
+  .sort((a: any, b: any) => +new Date(b.data?.date ?? 0) - +new Date(a.data?.date ?? 0))
   .slice(0, 3)
-  .map((p) => ({
+  .map((p: any) => ({
     title: p.data?.title ?? 'Untitled',
     href: `/writing/${p.slug}`,
     excerpt: p.data?.description,
   }));
 
-const featuredEntry = wins.find((w) => w?.data?.feature) ?? null;
+const featuredEntry = wins.find((w: any) => w?.data?.feature) ?? null;
 
 const hero = {
   title: "I build systems that save time, cut waste, and create space for people to shine.",
   subtitle: "Sharron Mooks — Transformation Strategist, Systems Thinker, Change Leader.",
-  ctaHref: "/wins",
+  ctaHref: "/system-wins",
 };
 
 const pyramid = {
@@ -57,7 +64,7 @@ const featuredWin = featuredEntry && {
   statA: { value: featuredEntry.data.stats.a.value, label: featuredEntry.data.stats.a.label },
   statB: { value: featuredEntry.data.stats.b.value, label: featuredEntry.data.stats.b.label },
   blurb: featuredEntry.data.summary,
-  ctaHref: `/wins/${featuredEntry.slug}`,
+  ctaHref: `/system-wins/${featuredEntry.slug}`,
 };
 
 const structuredData = {

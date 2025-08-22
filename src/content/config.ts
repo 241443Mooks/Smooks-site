@@ -61,6 +61,15 @@ const articles = defineCollection({
   }),
 });
 
+const writing = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    date: z.string(), // ISO date
+    draft: z.boolean().optional(),
+  }),
+});
 
 
 
