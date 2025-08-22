@@ -67,6 +67,7 @@ const writing = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     date: z.string(), // ISO date
+    linkedin: z.string().url().optional(),
     draft: z.boolean().optional(),
   }),
 });
@@ -75,5 +76,5 @@ const writing = defineCollection({
 
 export const collections = {
   // keep existing collections here (e.g., wins, articles) if defined
-  playbooks, wins, articles
+  playbooks, wins, articles, writing
 };
