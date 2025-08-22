@@ -9,6 +9,7 @@ import { getCollection } from 'astro:content';
 const articles = await getCollection('articles', (e) => e.data.draft !== true);
 const wins = await getCollection('wins', (e) => e.data.draft !== true);
 const playbooks = await getCollection('playbooks', (e) => e.data.draft !== true);
+const writing = await getCollection('writing', (e) => e.data.draft !== true);
 
 function toPages<T extends { slug: string; data: any }>(
   entries: T[],

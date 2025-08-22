@@ -1,31 +1,37 @@
 ---
-const { title = "SMooks", description = "Sharron Mooks — Transformation Strategist" } = Astro.props;
+import "../styles/global.css";
 ---
-<html lang="en" class="h-full scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-  </head>
-  <body class="min-h-full bg-white text-gray-900 antialiased">
-    <header class="border-b border-gray-200">
-      <div class="mx-auto max-w-7xl px-4 py-4">
-        <nav class="flex items-center justify-between" aria-label="Primary">
-          <a href="/" class="text-sm font-semibold tracking-wide">SMooks</a>
-          <ul class="hidden gap-6 text-sm text-gray-700 sm:flex">
-            <li><a class="hover:underline underline-offset-4" href="/wins">Systems Wins</a></li>
-            <li><a class="hover:underline underline-offset-4" href="/playbooks">Playbooks</a></li>
-            <li><a class="hover:underline underline-offset-4" href="/writing">Writing</a></li>
-            <li><a class="hover:underline underline-offset-4" href="/about">About</a></li>
-            <li><a class="hover:underline underline-offset-4" href="/contact">Contact</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+<body class="h-full antialiased" style="color:var(--fg); background:var(--bg);">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:m-4 focus:rounded focus:bg-[var(--surface)] focus:px-3 focus:py-2">
+    Skip to content
+  </a>
 
+  <header class="border-b sticky top-0 z-40 supports-[backdrop-filter]:backdrop-blur"
+    style="border-color: var(--border); background: color-mix(in oklab, var(--bg) 66%, transparent);">
+    <nav class="container flex items-center gap-6 py-4">
+      <a href="/" class="font-semibold tracking-tight">SMooks</a>
+      <ul class="ml-auto flex items-center gap-4">
+        <li><a class="hover:underline" href="/system-wins">Systems Wins</a></li>
+        <li><a class="hover:underline" href="/playbooks">Playbooks</a></li>
+        <li><a class="hover:underline" href="/writing">Writing</a></li>
+        <li><a class="hover:underline" href="/about">About</a></li>
+        <li>
+          <a class="inline-flex items-center rounded-[var(--radius-md)] px-3 py-2
+                     bg-[var(--c-primary)] text-[var(--c-primary-contrast)]
+                     hover:brightness-95 active:scale-[.99] transition-transform duration-[var(--dur-1)] ease-[var(--ease)]"
+             href="https://www.linkedin.com/in/sharronmooks/"
+             aria-label="Connect on LinkedIn">
+             LinkedIn
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+    <!-- ✅ THIS BLOCK IS REQUIRED -->
     <main id="main">
       <slot />
     </main>
-  </body>
-</html>
+    <!-- /required -->
+<footer class="border-t py-10 text-sm" style="border-color: var(--border); color: var(--c-on-muted);">
+  ...
+</footer>

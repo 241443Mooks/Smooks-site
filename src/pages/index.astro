@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import FeaturedWin from "../components/FeaturedWin.astro";
@@ -8,19 +9,36 @@ import LatestWriting from "../components/LatestWriting.astro";
 import AboutSnapshot from "../components/AboutSnapshot.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 
-// content (pull from MD collections when ready)
+
+// 🔒 Defensive wrapper so missing/empty collections never crash
+const safeGet = async (name: string) => {
+  try {
+    const items = await getCollection(name as any);
+    return Array.isArray(items) ? items : [];
+  } catch {
+    return [];
+  }
+};
+
+const writing = await safeGet('writing');
+const wins = await safeGet('wins');
+
+const posts = writing
+  .filter((p: any) => !p.data?.draft)
+  .sort((a: any, b: any) => +new Date(b.data?.date ?? 0) - +new Date(a.data?.date ?? 0))
+  .slice(0, 3)
+  .map((p: any) => ({
+    title: p.data?.title ?? 'Untitled',
+    href: `/writing/${p.slug}`,
+    excerpt: p.data?.description,
+  }));
+
+const featuredEntry = wins.find((w: any) => w?.data?.feature) ?? null;
+
 const hero = {
   title: "I build systems that save time, cut waste, and create space for people to shine.",
   subtitle: "Sharron Mooks — Transformation Strategist, Systems Thinker, Change Leader.",
-  ctaHref: "/wins",
-};
-
-const featuredWin = {
-  title: "Regional Staff Awards — Built by Students, Adopted by 7 Schools",
-  statA: { value: "1,000+", label: "Nominations in week one" },
-  statB: { value: "80%", label: "Staff engagement" },
-  blurb: "Powered by automated reporting and live dashboards that made recognition effortless.",
-  ctaHref: "/wins/regional-staff-awards",
+  ctaHref: "/system-wins",
 };
 
 const pyramid = {
@@ -35,33 +53,34 @@ const playbook = {
   ctaHref: "/playbooks",
 };
 
-const posts = [
-  { title: "Stop Adding Apps — Start Building Rome", href: "/writing/rome-vs-empire", excerpt: "System design principles for coherence at scale." },
-  { title: "From Dashboards to Decisions", href: "/writing/dashboards-to-decisions", excerpt: "Turning data visibility into action." },
-  { title: "Designing for Calm Systems", href: "/writing/calm-systems", excerpt: "Operational serenity through structure." },
-];
-
 const about = {
   blurb: "Strategist across engineering, tech start-ups, SMEs, and education. I simplify complexity so people can do their best work. Outside of work: hiking, caving, and tackling problem-solving challenges for fun.",
   ctaHref: "/about",
   imgSrc: "/images/sharron.jpg",
 };
+
+const featuredWin = featuredEntry && {
+  title: featuredEntry.data.title,
+  statA: { value: featuredEntry.data.stats.a.value, label: featuredEntry.data.stats.a.label },
+  statB: { value: featuredEntry.data.stats.b.value, label: featuredEntry.data.stats.b.label },
+  blurb: featuredEntry.data.summary,
+  ctaHref: `/system-wins/${featuredEntry.slug}`,
+};
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Sharron Mooks',
+  url: 'https://www.smooks.co.uk',
+  sameAs: ['https://www.linkedin.com/in/sharronmooks/']
+};
 ---
-<Layout title="SMooks — Transformation Strategist">
-  <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
-
+<Layout title="SMooks — Transformation Strategist" structuredData={structuredData}>
   <Hero {...hero} />
-
-  <!-- keep hero + win above the fold on large screens -->
-  <FeaturedWin {...featuredWin} />
-
+  {featuredWin && <FeaturedWin {...featuredWin} />}
   <ValuePyramid {...pyramid} />
-
   <FeaturedPlaybook {...playbook} />
-
   <LatestWriting posts={posts} />
-
   <AboutSnapshot {...about} />
-
   <SiteFooter />
 </Layout>
