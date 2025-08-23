@@ -2,7 +2,7 @@
 // src/pages/writing/[slug].astro
 export const prerender = true;
 
-import Layout from "../../layouts/Layout.astro";
+import Layout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
