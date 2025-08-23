@@ -1,70 +1,34 @@
 ---
-import Layout from "../layouts/BaseLayout.astro";
-import Hero from "../components/Hero.astro";
-import FeaturedWin from "../components/FeaturedWin.astro";
-import ValuePyramid from "../components/ValuePyramid.astro";
-import FeaturedPlaybook from "../components/FeaturedPlaybook.astro";
-import LatestWriting from "../components/LatestWriting.astro";
-import AboutSnapshot from "../components/AboutSnapshot.astro";
-import SiteFooter from "../components/SiteFooter.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/Button.astro";
 import Card from "../components/Card.astro";
 import Tag from "../components/Tag.astro";
-
-// content (pull from MD collections when ready)
-const hero = {
-  title: "I build systems that save time, cut waste, and create space for people to shine.",
-  subtitle: "Sharron Mooks — Transformation Strategist, Systems Thinker, Change Leader.",
-  ctaHref: "/wins",
-};
-
-const featuredWin = {
-  title: "Regional Staff Awards — Built by Students, Adopted by 7 Schools",
-  statA: { value: "1,000+", label: "Nominations in week one" },
-  statB: { value: "80%", label: "Staff engagement" },
-  blurb: "Powered by automated reporting and live dashboards that made recognition effortless.",
-  ctaHref: "/wins/regional-staff-awards",
-};
-
-const pyramid = {
-  base: "Human-centred, data-driven, pragmatic leadership.",
-  middle: "Designing scalable structures, automating workflows, simplifying the complex.",
-  top: "Sustainable transformation, empowered teams, visible results.",
-};
-
-const playbook = {
-  title: "Rome vs Empire — systemic design > chasing apps",
-  summary: "A practical framework for moving from reactive tool adoption to intentional architecture.",
-  ctaHref: "/playbooks",
-};
-
-const posts = [
-  { title: "Stop Adding Apps — Start Building Rome", href: "/writing/rome-vs-empire", excerpt: "System design principles for coherence at scale." },
-  { title: "From Dashboards to Decisions", href: "/writing/dashboards-to-decisions", excerpt: "Turning data visibility into action." },
-  { title: "Designing for Calm Systems", href: "/writing/calm-systems", excerpt: "Operational serenity through structure." },
-];
-
-const about = {
-  blurb: "Strategist across engineering, tech start-ups, SMEs, and education. I simplify complexity so people can do their best work. Outside of work: hiking, caving, and tackling problem-solving challenges for fun.",
-  ctaHref: "/about",
-  imgSrc: "/images/sharron.jpg",
-};
 ---
-<Layout title="SMooks — Transformation Strategist">
-  <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
+<BaseLayout title="SMooks — Systems that let people shine">
+  <section class="py-10 md:py-16">
+    <p class="text-sm text-[color:var(--color-muted)] mb-3">Sharron Mooks</p>
+    <h1>I build systems that save time, cut waste, and create space for people to shine.</h1>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <Button href="/system-wins">Explore Systems Wins</Button>
+      <Button variant="secondary" href="https://www.linkedin.com/in/sharronmooks">Connect on LinkedIn</Button>
+    </div>
+  </section>
 
-  <Hero {...hero} />
+  <section class="grid md:grid-cols-2 gap-8">
+    <Card>
+      <div class="flex items-center gap-3 mb-4">
+        <Tag tone="accent" label="Case Study" />
+        <span class="text-sm text-[color:var(--color-muted)]">Adopted by 7 schools</span>
+      </div>
+      <h2 class="mb-2">Regional Staff Awards — Built by Students</h2>
+      <p class="mb-4">Nomination platform + automated reporting + live dashboards. 1,000+ submissions in week one.</p>
+      <Button href="/system-wins/awards">Read the full story</Button>
+    </Card>
 
-  <!-- keep hero + win above the fold on large screens -->
-  <FeaturedWin {...featuredWin} />
-
-  <ValuePyramid {...pyramid} />
-
-  <FeaturedPlaybook {...playbook} />
-
-  <LatestWriting posts={posts} />
-
-  <AboutSnapshot {...about} />
-
-  <SiteFooter />
-</Layout>
+    <Card>
+      <h3 class="mb-2">AI Policy → usable guardrails</h3>
+      <p class="mb-4">Balanced risk, opportunity, and practicality across education, operations, and support.</p>
+      <Button variant="secondary" href="/playbooks/ai-policy">View playbook</Button>
+    </Card>
+  </section>
+</BaseLayout>
