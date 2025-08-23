@@ -1,22 +1,7 @@
 ---
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/system-wins", label: "Systems Wins" },
-  { href: "/playbooks", label: "Playbooks" },
-  { href: "/writing", label: "Writing" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-const { currentPath = "/" } = Astro.props;
-const current = Astro.url.pathname;
-const isActive = (href: string) => current === href || current.startsWith(href + '/');
-
-import ThemeToggle from "./ThemeToggle.ts";
+// src/components/Header.astro
+import ThemeToggle from "./ThemeToggle.astro";
 ---
-<a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-white text-black px-3 py-2 rounded">
-  Skip to content
-</a>
-
 <header class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-opacity-80 bg-[color:var(--color-bg)]/80 border-b" style="border-color: var(--color-border);">
   <div class="mx-auto max-w-6xl px-6 md:px-8 h-16 flex items-center justify-between">
     <a href="/" class="font-heading text-lg md:text-xl font-semibold no-underline">SMooks</a>
@@ -28,7 +13,7 @@ import ThemeToggle from "./ThemeToggle.ts";
     </nav>
     <div class="flex items-center gap-3">
       <a href="/contact" class="btn btn-secondary">Contact</a>
-      <ThemeToggle client:load />
+      <ThemeToggle />
     </div>
   </div>
 </header>
