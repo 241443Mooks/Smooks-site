@@ -1,6 +1,5 @@
 ---
-// src/components/Header.astro
-import ThemeToggle from "./ThemeToggle.astro";
+/* src/components/Header.astro */
 ---
 <header class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-opacity-80 bg-[color:var(--color-bg)]/80 border-b" style="border-color: var(--color-border);">
   <div class="mx-auto max-w-6xl px-6 md:px-8 h-16 flex items-center justify-between">
@@ -13,7 +12,19 @@ import ThemeToggle from "./ThemeToggle.astro";
     </nav>
     <div class="flex items-center gap-3">
       <a href="/contact" class="btn btn-secondary">Contact</a>
-      <ThemeToggle />
+
+      <!-- Theme toggle (no framework) -->
+      <button id="theme-toggle" class="btn btn-secondary" aria-label="Toggle theme">
+        <span class="sr-only">Toggle dark mode</span> 🌓
+      </button>
+      <script>
+        const btn = document.getElementById('theme-toggle');
+        btn?.addEventListener('click', () => {
+          const el = document.documentElement;
+          const isDark = el.classList.toggle('dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+      </script>
     </div>
   </div>
 </header>
