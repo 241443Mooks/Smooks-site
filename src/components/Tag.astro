@@ -1,0 +1,24 @@
+---
+// src/components/Tag.astro
+const { tone = 'default', label } = Astro.props;
+/* tone: 'default' | 'primary' | 'accent' | 'success' | 'warning' | 'error' */
+const styleMap = {
+  default: '',
+  primary: 'border-transparent text-white',
+  accent: 'border-transparent',
+  success: 'border-transparent',
+  warning: 'border-transparent',
+  error: 'border-transparent',
+}
+const bgMap = {
+  default: 'var(--color-card-bg)',
+  primary: 'var(--color-primary)',
+  accent: 'var(--color-accent)',
+  success: 'var(--color-success)',
+  warning: 'var(--color-warning)',
+  error: 'var(--color-error)',
+}
+---
+<span class={`tag ${styleMap[tone] ?? ''}`} style={`background:${bgMap[tone] ?? 'var(--color-card-bg)'};`}>
+  {label}
+</span>

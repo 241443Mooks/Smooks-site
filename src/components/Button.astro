@@ -1,0 +1,10 @@
+---
+// src/components/Button.astro
+const { variant = 'primary', href, children } = Astro.props;
+const base = 'btn ' + (variant === 'secondary' ? 'btn-secondary' : 'btn-primary');
+---
+{href ? (
+  <a href={href} class={base}><slot /></a>
+) : (
+  <button class={base}><slot /></button>
+)}

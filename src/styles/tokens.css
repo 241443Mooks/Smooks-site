@@ -1,0 +1,42 @@
+/* src/styles/tokens.css */
+:root {
+  --color-primary: #1A1F36;
+  --color-accent: #F5A623;
+  --color-bg: #FFFFFF;
+  --color-text: #1A1A1A;
+  --color-muted: #6B7280;
+
+  --color-success: #059669;
+  --color-error: #B91C1C;
+  --color-warning: #D97706;
+
+  --color-card-bg: #F9FAFB;
+  --color-border: #E5E7EB;
+}
+
+:root.dark {
+  --color-bg: #0F1117;
+  --color-text: #F3F4F6;
+  --color-card-bg: #1F2937;
+  --color-border: #374151;
+}
+:root.high-contrast {
+  --color-primary: #000000;
+  --color-accent: #FFFF00;
+  --color-bg: #FFFFFF;
+  --color-text: #000000;
+  --color-muted: #4B5563;
+
+  --color-success: #008000;
+  --color-error: #FF0000;
+  --color-warning: #FFA500;
+
+  --color-card-bg: #FFFFFF;
+  --color-border: #000000;
+}
+:root.dark.high-contrast {
+  --color-bg: #000000;
+  --color-text: #FFFFFF;
+  --color-card-bg: #000000;
+  --color-border: #FFFFFF;
+}     

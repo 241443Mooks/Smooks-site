@@ -1,0 +1,8 @@
+---
+// src/components/Blockquote.astro
+const { cite } = Astro.props;
+---
+<blockquote class="blockquote">
+  <slot />
+  {cite && <cite class="not-italic block mt-2 text-sm text-[color:var(--color-muted)]">— {cite}</cite>}
+</blockquote>

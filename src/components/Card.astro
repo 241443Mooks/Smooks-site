@@ -1,0 +1,8 @@
+---
+// src/components/Card.astro
+const { as = 'article' } = Astro.props;
+const Tag = as;
+---
+<Fragment set:html={`<${as} class="card">`} />
+  <slot />
+<Fragment set:html={`</${as}>`} />
