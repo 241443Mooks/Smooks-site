@@ -61,10 +61,53 @@ const articles = defineCollection({
   }),
 });
 
+const caseStudies = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    slug: z.string().optional(),
+    year: z.string().describe("e.g., 2025 or 2013–2015"),
+    organisation: z.string().optional(),
+    stream: z.enum([
+      "tech-digital",
+      "people-culture",
+      "systems-automation",
+      "ops-modernisation",
+      "education-learning",
+      "leadership-governance",
+      "innovation-growth",
+    ]),
+    tags: z.array(z.string()).default([]),
+    summary: z.string(),
+    impact: z.array(
+      z.object({
+        label: z.string(),
+        value: z.string(), // '12,000+ hours saved', '90% engagement', '~30% reduction'
+      })
+    ).default([]),
+    scale: z.string().optional(), // '#users/sites/staff'
+    longevity: z.string().optional(), // 'still in use', 'scaled to 7 schools'
+    cmi_units: z.array(z.string()).default([]), // e.g., ['701','705','709']
+    links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
+    status: z.enum(["draft", "published"]).default("published"),
+    heroImage: z.string().optional(),
+    heroAlt: z.string().optional(),
+    seo: z
+      .object({
+        title: z.string().optional(),
+        description: z.string().optional(),
+      })
+      .optional(),
+  }),
+});
+
 
 
 
 export const collections = {
   // keep existing collections here (e.g., wins, articles) if defined
-  playbooks, wins, articles
+  playbooks,
+  wins,
+  articles,
+  "case-studies": caseStudies,
 };
