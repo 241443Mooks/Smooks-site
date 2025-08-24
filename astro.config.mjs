@@ -4,6 +4,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://www.smooks.co.uk', // ⬅️ add this
+  site: 'https://www.smooks.co.uk',
   integrations: [tailwind(), mdx(), sitemap()],
 });

@@ -18,7 +18,8 @@
     "@astrojs/rss": "^4.0.12",
     "astro-og-canvas": "^0.7.0",
     "canvaskit-wasm": "^0.40.0",
-    "sharp": "^0.34.3"
+    "sharp": "^0.34.3",
+    "@tailwindcss/typography": "^0.5.12"
   },
   "pnpm": {
     "allowedBuiltDependencies": [
