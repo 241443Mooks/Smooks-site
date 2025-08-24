@@ -1,7 +1,31 @@
----
-import Layout from "../layouts/BaseLayout.astro";
----
-<Layout title="Contact — SMooks" description="Get in touch for consulting, talks, or collaboration.">
-  <h1 class="text-3xl font-semibold mb-6">Contact</h1>
-  <p class="text-zinc-300">Form/Email coming soon.</p>
-</Layout>
+<html lang="en">
+  <head>
+    <title>Contact — SMooks</title>
+  </head>
+  <body class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold">Contact</h1>
+    <p class="mt-3 text-gray-700">I welcome strategic conversations, collaborations, and opportunities to scale transformation.</p>
+
+    <form name="contact" method="POST" data-netlify="true" class="mt-6 space-y-4">
+      <input type="hidden" name="form-name" value="contact" />
+      <div>
+        <label class="block text-sm font-medium">Name</label>
+        <input name="name" required class="mt-1 w-full rounded-2xl border px-4 py-3" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Email</label>
+        <input name="email" type="email" required class="mt-1 w-full rounded-2xl border px-4 py-3" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Message</label>
+        <textarea name="message" rows="5" required class="mt-1 w-full rounded-2xl border px-4 py-3"></textarea>
+      </div>
+      <button class="rounded-2xl bg-gray-900 px-5 py-3 font-medium text-white">Send</button>
+    </form>
+
+    <div class="mt-6 text-sm text-gray-600">
+      Or email me directly: <a class="underline" href="mailto:hello@smooks.co.uk">hello@smooks.co.uk</a>
+    </div>
+  </body>
+</html>
+

@@ -1,25 +1,22 @@
----
-import Layout from "../layouts/BaseLayout.astro";
----
-{Astro.url.pathname === '/' || Astro.url.pathname.startsWith('/about') ? (
-  <script type="application/ld+json">
-    {JSON.stringify({
-      "@context":"https://schema.org",
-      "@type":"Person",
-      name:"Sharron Mooks",
-      alternateName:"SMooks",
-      url:"https://smooks.co.uk/",
-      image:"https://smooks.co.uk/images/sharron.jpg",
-      jobTitle:"Education Systems & Transformation Lead",
-      sameAs:[
-        "https://www.linkedin.com/in/<your-handle>/",
-        "https://github.com/241443Mooks"
-      ]
-    })}
-  </script>
-) : null}
+<html lang="en">
+  <head>
+    <title>About — SMooks</title>
+  </head>
+  <body class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold">About</h1>
+    <p class="mt-4 text-gray-700">
+      I’m Sharron “SMooks” Mooks — a strategic, systems-focused education leader. I design and deliver scalable,
+      human-centred systems: SharePoint/365 platforms, AI policy and governance, ISO-aligned frameworks, and the kind
+      of operational clarity that frees people to do their best work.
+    </p>
+    <p class="mt-4 text-gray-700">
+      I’ve led student-built, region-wide platforms (like a staff recognition system with 1,147 nominations across 7 schools),
+      created high‑impact timetables, and authored responsible AI policy adopted group‑wide. My approach: integrity first,
+      clarity always, measurable outcomes.
+    </p>
+    <p class="mt-4 text-gray-700">
+      Beyond work, I coach and mentor, love big landscapes, and believe culture changes when systems do.
+    </p>
+  </body>
+</html>
 
-<Layout title="About — SMooks" description="Sharron ‘SMooks’ Mooks — education systems & transformation.">
-  <h1 class="text-3xl font-semibold mb-6">About</h1>
-  <p class="text-zinc-300">Bio and media kit coming soon.</p>
-</Layout>
