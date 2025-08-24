@@ -1,0 +1,18 @@
+---
+export const prerender = true;
+import CaseStudyLayout from "../../components/CaseStudyLayout.astro";
+import caseStudies from "../../data/caseStudies";
+
+export function getStaticPaths() {
+  return caseStudies.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+if (!slug) throw new Error("Missing slug");
+
+const entry = caseStudies.find((c) => c.slug === slug);
+if (!entry) throw new Error(`Case study not found: ${slug}`);
+---
+
+<CaseStudyLayout entry={entry} />
+
