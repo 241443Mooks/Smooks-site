@@ -1,0 +1,36 @@
+---
+import Base from "@/layouts/Base.astro";
+import SEO from "@/components/SEO.astro";
+import PortfolioBrowser from "@/components/PortfolioBrowser.astro";
+import { getCollection } from "astro:content";
+import { slugify } from "@/utils/slugify";
+
+const entries = await getCollection("portfolio", ({ data }) => data.published !== false);
+const items = entries
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((e) => ({
+    slug: slugify(e.slug ?? e.id ?? e.data.title),
+    title: e.data.title,
+    summary: e.data.summary,
+    type:
+      e.data.type === "case-study"
+        ? "Case Study"
+        : e.data.type === "system-win"
+        ? "System Win"
+        : "Writing",
+    year: e.data.date.getUTCFullYear(),
+    streams: e.data.streams ?? [],
+    industries: e.data.industry ?? [],
+    projectTypes: e.data.projectType ?? [],
+    tags: e.data.tags ?? [],
+    thumbnail: e.data.cover,
+  }));
+
+const url = new URL(Astro.request.url).toString();
+---
+
+<Base title="Portfolio — SMooks" description="Case studies, system wins, and writing" canonical={url}>
+  <SEO title="Portfolio — SMooks" description="Case studies, system wins, and writing" />
+  <PortfolioBrowser items={items} />
+</Base>
+
