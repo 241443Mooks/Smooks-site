@@ -1,5 +1,14 @@
 ---
-import type { PortfolioItem } from "../lib/search/fuse";
+type PortfolioItem = {
+  slug: string;
+  title: string;
+  summary: string;
+  type: "Case Study" | "System Win" | "Writing";
+  year: number;
+  streams: string[];
+  tags: string[];
+  thumbnail?: string;
+};
 const { items } = Astro.props as { items: PortfolioItem[] };
 ---
 
@@ -17,13 +26,7 @@ const { items } = Astro.props as { items: PortfolioItem[] };
   </div>
 
   <div class="mb-2 text-xs uppercase tracking-wide text-gray-500">Streams</div>
-  <div class="mb-4 flex flex-wrap gap-2" id="streams"></div>
-
-  <div class="mb-2 text-xs uppercase tracking-wide text-gray-500">Industries</div>
-  <div class="mb-4 flex flex-wrap gap-2" id="industries"></div>
-
-  <div class="mb-2 text-xs uppercase tracking-wide text-gray-500">Project Types</div>
-  <div class="mb-6 flex flex-wrap gap-2" id="projects"></div>
+  <div class="mb-6 flex flex-wrap gap-2" id="streams"></div>
 
   <div id="results" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
     {items.map((i) => (
@@ -48,10 +51,7 @@ const { items } = Astro.props as { items: PortfolioItem[] };
           {i.streams.slice(0, 1).map((t) => (
             <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">{t}</span>
           ))}
-          {i.industries.slice(0, 1).map((t) => (
-            <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">{t}</span>
-          ))}
-          {i.projectTypes.slice(0, 1).map((t) => (
+          {i.tags.slice(0, 1).map((t) => (
             <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">{t}</span>
           ))}
         </div>
@@ -63,71 +63,102 @@ const { items } = Astro.props as { items: PortfolioItem[] };
 <!-- 1) put the data INSIDE the component -->
 <script type="application/json" id="items-data">{JSON.stringify(items)}</script>
 
-<!-- 2) inline the script so it runs after the JSON above -->
-<script is:inline>
-  import { makeIndex } from "../lib/search/fuse";
-
-  // read JSON right above this tag (guaranteed order)
-  const dataEl = document.currentScript.previousElementSibling;
-  const all = JSON.parse(dataEl.textContent);
+<!-- 2) module script to power search & filters -->
+<script type="module">
+  const all = JSON.parse(document.getElementById("items-data").textContent);
 
   const $q = document.getElementById("q");
   const $type = document.getElementById("type");
   const $year = document.getElementById("year");
   const $streams = document.getElementById("streams");
-  const $industries = document.getElementById("industries");
-  const $projects = document.getElementById("projects");
   const $results = document.getElementById("results");
 
-  // years
-  [...new Set(all.map(i=>i.year))].sort((a,b)=>b-a).forEach(y=>{
-    const o=document.createElement("option"); o.value=String(y); o.textContent=String(y); $year.appendChild(o);
-  });
+  // populate year options
+  [...new Set(all.map((i) => i.year))]
+    .sort((a, b) => b - a)
+    .forEach((y) => {
+      const o = document.createElement("option");
+      o.value = String(y);
+      o.textContent = String(y);
+      $year.appendChild(o);
+    });
 
-  const uniq = (xs)=>[...new Set(xs)].sort((a,b)=>a.localeCompare(b));
+  const uniq = (xs) => [...new Set(xs)].sort((a, b) => a.localeCompare(b));
   const mkChips = (vals, mount) => {
     const set = new Set();
-    vals.forEach(tag=>{
-      const b=document.createElement("button");
-      b.className="rounded-full border px-3 py-1 text-sm hover:bg-gray-50 data-[on=true]:bg-gray-900 data-[on=true]:text-white";
-      b.textContent=tag;
-      b.addEventListener("click", ()=>{ set.has(tag)?set.delete(tag):set.add(tag); b.dataset.on=set.has(tag)?"true":"false"; render(); });
+    vals.forEach((tag) => {
+      const b = document.createElement("button");
+      b.className =
+        "rounded-full border px-3 py-1 text-sm hover:bg-gray-50 data-[on=true]:bg-gray-900 data-[on=true]:text-white";
+      b.textContent = tag;
+      b.addEventListener("click", () => {
+        set.has(tag) ? set.delete(tag) : set.add(tag);
+        b.dataset.on = set.has(tag) ? "true" : "false";
+        render();
+      });
       mount.appendChild(b);
     });
     return set;
   };
 
-  const streamsSet    = mkChips(uniq(all.flatMap(i=>i.streams)), $streams);
-  const industriesSet = mkChips(uniq(all.flatMap(i=>i.industries)), $industries);
-  const projectsSet   = mkChips(uniq(all.flatMap(i=>i.projectTypes)), $projects);
+  const streamsSet = mkChips(uniq(all.flatMap((i) => i.streams)), $streams);
 
-  const fuse = makeIndex(all);
+  const fuse = (function makeIndex(items) {
+    const prepared = items.map((item) => ({
+      item,
+      haystack: [
+        item.title,
+        item.summary,
+        item.tags.join(" "),
+        item.streams.join(" "),
+      ]
+        .join(" ")
+        .toLowerCase(),
+    }));
+    return {
+      search(q) {
+        const needle = q.toLowerCase();
+        return prepared
+          .filter((p) => p.haystack.includes(needle))
+          .map((p) => ({ item: p.item }));
+      },
+    };
+  })(all);
 
-  const passFacets = (i) =>
-    (!streamsSet.size    || i.streams.some(t=>streamsSet.has(t))) &&
-    (!industriesSet.size || i.industries.some(t=>industriesSet.has(t))) &&
-    (!projectsSet.size   || i.projectTypes.some(t=>projectsSet.has(t)));
-
-  function render(){
+  function render() {
     let list = all;
-    const q = $q.value?.trim();
-    if (q) list = fuse.search(q).map(r=>r.item);
+    const q = $q.value.trim();
+    if (q) list = fuse.search(q).map((r) => r.item);
 
-    list = list.filter(i =>
-      (!$type.value || i.type=== $type.value) &&
-      (!$year.value || String(i.year) === $year.value) &&
-      passFacets(i)
+    list = list.filter(
+      (i) =>
+        (!$type.value || i.type === $type.value) &&
+        (!$year.value || String(i.year) === $year.value) &&
+        (!streamsSet.size || i.streams.some((t) => streamsSet.has(t)))
     );
 
     $results.innerHTML = "";
-    if (!list.length) { $results.innerHTML = `<div class="col-span-full text-gray-500">No results. Clear some filters.</div>`; return; }
+    if (!list.length) {
+      $results.innerHTML = `<div class="col-span-full text-gray-500">No results. Clear some filters.</div>`;
+      return;
+    }
 
     for (const i of list) {
-      const a=document.createElement("a");
-      a.href = `/${i.type==="Writing"?"writing":i.type==="System Win"?"system-wins":"portfolio"}/${i.slug}`;
-      a.className="block rounded-2xl border hover:shadow-lg transition p-4";
+      const a = document.createElement("a");
+      a.href = `/${
+        i.type === "Writing"
+          ? "writing"
+          : i.type === "System Win"
+          ? "system-wins"
+          : "portfolio"
+      }/${i.slug}`;
+      a.className = "block rounded-2xl border hover:shadow-lg transition p-4";
       a.innerHTML = `
-        ${i.thumbnail?`<img src="${i.thumbnail}" alt="" class="mb-3 aspect-video w-full rounded-xl object-cover">":""}
+        ${
+          i.thumbnail
+            ? `<img src="${i.thumbnail}" alt="" class="mb-3 aspect-video w-full rounded-xl object-cover">`
+            : ""
+        }
         <div class="flex items-center justify-between">
           <span class="text-xs uppercase tracking-wide text-gray-500">${i.type}</span>
           <span class="text-xs text-gray-500">${i.year}</span>
@@ -135,15 +166,28 @@ const { items } = Astro.props as { items: PortfolioItem[] };
         <h3 class="mt-1 text-lg font-semibold">${i.title}</h3>
         <p class="mt-1 text-sm text-gray-600">${i.summary}</p>
         <div class="mt-3 flex flex-wrap gap-1">
-          ${i.streams.slice(0,1).map(t=>`<span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">${t}</span>`).join("")}
-          ${i.industries.slice(0,1).map(t=>`<span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">${t}</span>`).join("")}
-          ${i.projectTypes.slice(0,1).map(t=>`<span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">${t}</span>`).join("")}
+          ${i.streams
+            .slice(0, 1)
+            .map(
+              (t) =>
+                `<span class=\"rounded-full bg-gray-100 px-2 py-0.5 text-xs\">${t}</span>`
+            )
+            .join("")}
+          ${i.tags
+            .slice(0, 1)
+            .map(
+              (t) =>
+                `<span class=\"rounded-full bg-gray-100 px-2 py-0.5 text-xs\">${t}</span>`
+            )
+            .join("")}
         </div>
       `;
       $results.appendChild(a);
     }
   }
 
-  [$q,$type,$year].forEach(el=>el.addEventListener("input", render));
+  $q.addEventListener("input", render);
+  $type.addEventListener("change", render);
+  $year.addEventListener("change", render);
   render();
 </script>
