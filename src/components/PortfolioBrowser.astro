@@ -1,5 +1,5 @@
 ---
-import type { PortfolioItem } from "@/lib/search/fuse";
+import type { PortfolioItem } from "../lib/search/fuse";
 const { items } = Astro.props as { items: PortfolioItem[] };
 ---
 
@@ -33,7 +33,7 @@ const { items } = Astro.props as { items: PortfolioItem[] };
 
 <!-- 2) inline the script so it runs after the JSON above -->
 <script is:inline>
-  import { makeIndex } from "@/lib/search/fuse";
+  import { makeIndex } from "../lib/search/fuse";
 
   // read JSON right above this tag (guaranteed order)
   const dataEl = document.currentScript.previousElementSibling;
