@@ -1,27 +1,28 @@
+import Fuse from "fuse.js";
+
 export type PortfolioItem = {
   slug: string;
   title: string;
   summary: string;
   type: "Case Study" | "System Win" | "Writing";
   year: number;
-  category: string[];
+  streams: string[];
+  industries: string[];
+  projectTypes: string[];
   tags: string[];
-  cmi: string[];
   thumbnail?: string;
 };
 
-export const makeIndex = async (items: PortfolioItem[]) => {
-  const { default: Fuse } = await import(
-    "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.min.js"
-  );
-  return new Fuse(items, {
+export const makeIndex = (items: PortfolioItem[]) =>
+  new Fuse(items, {
     keys: [
-      { name: "title", weight: 0.5 },
-      { name: "summary", weight: 0.3 },
-      { name: "tags", weight: 0.15 },
-      { name: "category", weight: 0.05 },
+      { name: "title", weight: 0.45 },
+      { name: "summary", weight: 0.25 },
+      { name: "tags", weight: 0.1 },
+      { name: "streams", weight: 0.1 },
+      { name: "industries", weight: 0.05 },
+      { name: "projectTypes", weight: 0.05 },
     ],
     includeScore: true,
-    threshold: 0.34,
+    threshold: 0.33,
   });
-};

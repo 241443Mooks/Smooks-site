@@ -1,0 +1,27 @@
+{
+  "_notes": "Map by slug (preferred) or by exact title. Values are arrays.",
+  "bySlug": {
+    "regional-staff-awards": {
+      "streams": ["Culture & Engagement", "Digital Transformation"],
+      "industries": ["Education"],
+      "projectTypes": ["Automation", "SharePoint Build"]
+    },
+    "rome-vs-empire": {
+      "streams": ["Strategy & Architecture"],
+      "industries": ["Education","Public Sector"],
+      "projectTypes": ["Framework","Writing"]
+    }
+  },
+  "byTitle": {
+    "Responsible AI Policy (Group-wide Adoption)": {
+      "streams": ["AI & Governance"],
+      "industries": ["Education"],
+      "projectTypes": ["Policy","Governance"]
+    }
+  },
+  "defaults": {
+    "streams": [],
+    "industries": ["Education"],
+    "projectTypes": []
+  }
+}

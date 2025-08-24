@@ -1,17 +1,15 @@
 ---
 import Base from "@/layouts/Base.astro";
-
 const url = new URL(Astro.request.url).toString();
 ---
-<Base title="Privacy" canonical={url}>
-  <main class="prose mx-auto py-10">
-    <h1>Privacy</h1>
-    <p>No cookies; using privacy-friendly analytics only. You can contact me at …</p>
-    <h2>Data controller</h2>
-    <p>Sharron Mooks, contact@smooks.co.uk</p>
-    <h2>What I collect</h2>
-    <ul><li>Contact form submissions (email address, message)</li></ul>
-    <h2>Your rights</h2>
-    <p>UK GDPR rights to access, rectification, erasure…</p>
+<Base title="Privacy — SMooks" description="Privacy information for smooks.co.uk" canonical={url}>
+  <main class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold">Privacy</h1>
+    <p class="mt-3 text-gray-700">This site uses no tracking cookies and only collects information that you submit via the contact form.</p>
+    <ul class="list-disc ml-6 mt-4 text-gray-700">
+      <li>No analytics cookies.</li>
+      <li>Contact form submissions are used only to respond to your enquiry.</li>
+      <li>You can request deletion of your data at any time: <a class="underline" href="mailto:hello@smooks.co.uk">hello@smooks.co.uk</a>.</li>
+    </ul>
   </main>
 </Base>
