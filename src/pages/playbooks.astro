@@ -1,12 +1,13 @@
 ---
-import Layout from "../layouts/BaseLayout.astro";
+import Base from "@/layouts/Base.astro";
 import { getCollection } from "astro:content";
 
 const playbooks = await getCollection("playbooks");
 const title = "Playbooks";
 const description = "Reusable frameworks and checklists.";
+const url = new URL(Astro.request.url).toString();
 ---
-<Layout {title} {description} currentPath={Astro.url.pathname}>
+<Base {title} {description} canonical={url}>
   <section class="mx-auto max-w-6xl">
     <h1 class="text-3xl md:text-4xl font-semibold">Playbooks</h1>
     <p class="text-zinc-400 mt-2 max-w-3xl">Frameworks you can reuse across schools and sectors.</p>
@@ -37,4 +38,4 @@ const description = "Reusable frameworks and checklists.";
       </ul>
     )}
   </section>
-</Layout>
+</Base>

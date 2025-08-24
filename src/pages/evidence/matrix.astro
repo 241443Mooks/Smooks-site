@@ -1,10 +1,11 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import Base from "@/layouts/Base.astro";
 import { getCollection } from 'astro:content';
 const entries = await getCollection('case-studies');
 const UNITS = ['701','702','703','704','705','706','707','708','709','710','711','712','713','714','715','716'];
+const url = new URL(Astro.request.url).toString();
 ---
-<BaseLayout title="Portfolio × CMI Matrix">
+<Base title="Portfolio × CMI Matrix" canonical={url}>
   <section class="container mx-auto px-4 py-10">
     <h1 class="text-3xl md:text-4xl font-semibold mb-6">Portfolio × CMI Evidence Matrix</h1>
     <div class="overflow-x-auto border rounded-2xl">
@@ -28,4 +29,4 @@ const UNITS = ['701','702','703','704','705','706','707','708','709','710','711'
       </table>
     </div>
   </section>
-</BaseLayout>
+</Base>

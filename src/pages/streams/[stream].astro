@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import Base from "@/layouts/Base.astro";
 import { getCollection } from 'astro:content';
 export async function getStaticPaths() {
   return [
@@ -17,8 +17,9 @@ const LABELS: Record<string,string> = {
   'leadership-governance':'Leadership, Strategy & Governance',
   'innovation-growth':'Innovation & Growth',
 };
+const url = new URL(Astro.request.url).toString();
 ---
-<BaseLayout title={`${LABELS[stream]} — Case Studies`}>
+<Base title={`${LABELS[stream]} — Case Studies`} canonical={url}>
   <section class="container mx-auto px-4 py-10">
     <h1 class="text-3xl md:text-4xl font-semibold mb-6">{LABELS[stream]}</h1>
     <div class="grid md:grid-cols-2 gap-6">
@@ -34,4 +35,4 @@ const LABELS: Record<string,string> = {
       ))}
     </div>
   </section>
-</BaseLayout>
+</Base>

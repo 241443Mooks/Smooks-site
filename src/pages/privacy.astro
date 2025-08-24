@@ -1,7 +1,9 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Base from "@/layouts/Base.astro";
+
+const url = new URL(Astro.request.url).toString();
 ---
-<Layout title="Privacy">
+<Base title="Privacy" canonical={url}>
   <main class="prose mx-auto py-10">
     <h1>Privacy</h1>
     <p>No cookies; using privacy-friendly analytics only. You can contact me at …</p>
@@ -12,4 +14,4 @@ import Layout from '@/layouts/Layout.astro';
     <h2>Your rights</h2>
     <p>UK GDPR rights to access, rectification, erasure…</p>
   </main>
-</Layout>
+</Base>

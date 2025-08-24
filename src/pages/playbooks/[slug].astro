@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 
-import Layout from "../../layouts/BaseLayout.astro";
+import Base from "@/layouts/Base.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -16,8 +16,9 @@ const { entry } = Astro.props as { entry: any };
 const { Content } = await entry.render();
 const title = entry.data.title ?? `Playbook: ${entry.slug}`;
 const description = entry.data.summary ?? "Reusable framework.";
+const url = new URL(Astro.request.url).toString();
 ---
-<Layout {title} {description} currentPath={Astro.url.pathname}>
+<Base {title} {description} canonical={url}>
   <section class="mx-auto max-w-3xl">
     <a href="/playbooks" class="text-sm text-zinc-400 hover:underline">← Back to Playbooks</a>
     <h1 class="mt-2 text-3xl md:text-4xl font-semibold">{title}</h1>
@@ -35,4 +36,4 @@ const description = entry.data.summary ?? "Reusable framework.";
       </div>
     )}
   </section>
-</Layout>
+</Base>
