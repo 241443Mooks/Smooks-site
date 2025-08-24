@@ -1,22 +1,46 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getCollection } from 'astro:content';
-const all = await getCollection('case-studies', ({ data }) => data.status !== 'draft');
+export const prerender = true;
+import CaseStudyCard from "../../components/CaseStudyCard.astro";
+import caseStudies from "../../data/caseStudies";
+
+const items = [...caseStudies].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 ---
-<BaseLayout title="Case Studies">
-  <section class="container mx-auto px-4 py-10">
-    <h1 class="text-3xl md:text-4xl font-semibold mb-6">Case Studies</h1>
-    <div class="grid md:grid-cols-2 gap-6">
-      {all.map(({ slug, data }) => (
-        <a href={`/case-studies/${slug}`}
-           class="block rounded-2xl p-6 shadow-sm hover:shadow-md transition border border-gray-200 bg-white dark:bg-zinc-900">
-          <h2 class="text-xl font-medium mb-2">{data.title}</h2>
-          <p class="text-sm text-gray-600 dark:text-gray-400">{data.summary}</p>
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            {data.impact?.slice(0,3).map(i => <span class="border px-2 py-1 rounded-full">{i.label}: {i.value}</span>)}
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
-</BaseLayout>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Case Studies · SMooks</title>
+    <meta
+      name="description"
+      content="CMI Level 7-aligned case studies demonstrating strategic leadership, change, policy, and systems design."
+    />
+  </head>
+  <body class="bg-white dark:bg-black text-zinc-900 dark:text-zinc-50">
+    <main class="mx-auto max-w-6xl px-4 md:px-6 py-10">
+      <header class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Case Studies</h1>
+        <p class="mt-2 text-zinc-600 dark:text-zinc-300 max-w-3xl">
+          A concise collection mapped to CMI Level 7 units, showcasing strategic change, policy design, data-informed
+          delivery, and systems architecture.
+        </p>
+      </header>
+
+      <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((cs) => (
+          <CaseStudyCard
+            href={`/case-studies/${cs.slug}/`}
+            title={cs.title}
+            summary={cs.summary}
+            units={cs.units}
+            date={cs.date}
+            tags={cs.tags}
+          />
+        ))}
+      </section>
+    </main>
+  </body>
+  </html>
+
