@@ -4,7 +4,7 @@ const { items } = Astro.props as { items: PortfolioItem[] };
 ---
 
 <section class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
-  <!-- Controls -->
+  <!-- controls kept as-is -->
   <div class="mb-6 grid gap-3 md:grid-cols-4">
     <input id="q" type="search" placeholder="Search title, summary, tags…" class="md:col-span-2 w-full rounded-2xl border px-4 py-3" />
     <select id="type" class="rounded-2xl border px-4 py-3">
@@ -16,7 +16,6 @@ const { items } = Astro.props as { items: PortfolioItem[] };
     <select id="year" class="rounded-2xl border px-4 py-3"><option value="">All years</option></select>
   </div>
 
-  <!-- Facet chips -->
   <div class="mb-2 text-xs uppercase tracking-wide text-gray-500">Streams</div>
   <div class="mb-4 flex flex-wrap gap-2" id="streams"></div>
 
@@ -29,10 +28,16 @@ const { items } = Astro.props as { items: PortfolioItem[] };
   <div id="results" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
 </section>
 
-<script type="module" client:load>
+<!-- 1) put the data INSIDE the component -->
+<script type="application/json" id="items-data">{JSON.stringify(items)}</script>
+
+<!-- 2) inline the script so it runs after the JSON above -->
+<script is:inline>
   import { makeIndex } from "@/lib/search/fuse";
 
-  const all = JSON.parse(document.getElementById("items-data").textContent);
+  // read JSON right above this tag (guaranteed order)
+  const dataEl = document.currentScript.previousElementSibling;
+  const all = JSON.parse(dataEl.textContent);
 
   const $q = document.getElementById("q");
   const $type = document.getElementById("type");
@@ -42,38 +47,34 @@ const { items } = Astro.props as { items: PortfolioItem[] };
   const $projects = document.getElementById("projects");
   const $results = document.getElementById("results");
 
-  // Years
+  // years
   [...new Set(all.map(i=>i.year))].sort((a,b)=>b-a).forEach(y=>{
-    const opt=document.createElement("option"); opt.value=String(y); opt.textContent=String(y); $year.appendChild(opt);
+    const o=document.createElement("option"); o.value=String(y); o.textContent=String(y); $year.appendChild(o);
   });
 
-  // Build facet chips
-  const mkChips = (arr, el) => {
+  const uniq = (xs)=>[...new Set(xs)].sort((a,b)=>a.localeCompare(b));
+  const mkChips = (vals, mount) => {
     const set = new Set();
-    arr.forEach(tag=>{
+    vals.forEach(tag=>{
       const b=document.createElement("button");
       b.className="rounded-full border px-3 py-1 text-sm hover:bg-gray-50 data-[on=true]:bg-gray-900 data-[on=true]:text-white";
-      b.textContent=tag; b.dataset.tag=tag;
+      b.textContent=tag;
       b.addEventListener("click", ()=>{ set.has(tag)?set.delete(tag):set.add(tag); b.dataset.on=set.has(tag)?"true":"false"; render(); });
-      el.appendChild(b);
+      mount.appendChild(b);
     });
     return set;
   };
 
-  const uniq = (list) => [...new Set(list)].sort((a,b)=>a.localeCompare(b));
-
-  const streamsSet = mkChips(uniq(all.flatMap(i=>i.streams)), $streams);
+  const streamsSet    = mkChips(uniq(all.flatMap(i=>i.streams)), $streams);
   const industriesSet = mkChips(uniq(all.flatMap(i=>i.industries)), $industries);
-  const projectsSet = mkChips(uniq(all.flatMap(i=>i.projectTypes)), $projects);
+  const projectsSet   = mkChips(uniq(all.flatMap(i=>i.projectTypes)), $projects);
 
   const fuse = makeIndex(all);
 
-  function passFacets(i){
-    const s = !streamsSet.size || i.streams.some(t=>streamsSet.has(t));
-    const ind = !industriesSet.size || i.industries.some(t=>industriesSet.has(t));
-    const p = !projectsSet.size || i.projectTypes.some(t=>projectsSet.has(t));
-    return s && ind && p;
-  }
+  const passFacets = (i) =>
+    (!streamsSet.size    || i.streams.some(t=>streamsSet.has(t))) &&
+    (!industriesSet.size || i.industries.some(t=>industriesSet.has(t))) &&
+    (!projectsSet.size   || i.projectTypes.some(t=>projectsSet.has(t)));
 
   function render(){
     let list = all;
@@ -114,5 +115,3 @@ const { items } = Astro.props as { items: PortfolioItem[] };
   [$q,$type,$year].forEach(el=>el.addEventListener("input", render));
   render();
 </script>
-
-<script type="application/json" id="items-data">{/* injected server-side */}</script>

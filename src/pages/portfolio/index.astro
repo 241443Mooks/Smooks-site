@@ -4,8 +4,9 @@ import PortfolioBrowser from "@/components/PortfolioBrowser.astro";
 import { getCollection } from "astro:content";
 import { slugify } from "@/utils/slugify";
 
-const cs = await getCollection("caseStudies");
-const sw = await getCollection("systemWins");
+// use the SAME ids you used in the working detail pages:
+const cs = await getCollection("caseStudies");   // or "case-studies" if that’s your config
+const sw = await getCollection("systemWins");    // or "system-wins"
 const wr = await getCollection("writing");
 
 const toItem = (type: "Case Study" | "System Win" | "Writing") => (e:any) => ({
@@ -32,5 +33,4 @@ const url = new URL(Astro.request.url).toString();
     <p class="mt-2 text-gray-600">Search and filter by type, transformation streams, industry, and project type.</p>
   </header>
   <PortfolioBrowser items={items} />
-  <script type="application/json" id="items-data">{JSON.stringify(items)}</script>
 </Base>

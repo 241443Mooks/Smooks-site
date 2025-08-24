@@ -4,8 +4,8 @@ import { getCollection } from 'astro:content';
 export async function GET(context) {
   const site = new URL(context.site ?? 'https://www.smooks.co.uk');
 
-  // If your collection id differs, change 'system-wins'
-  const posts = await getCollection('system-wins');
+  // If your collection id differs, change 'systemWins'
+  const posts = await getCollection('systemWins');
 
   return rss({
     title: 'SMooks — System Wins',
