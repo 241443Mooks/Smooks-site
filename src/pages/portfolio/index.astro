@@ -8,27 +8,28 @@ const cs = await getCollection("caseStudies");
 const sw = await getCollection("systemWins");
 const wr = await getCollection("writing");
 
-const toItem = (type: "Case Study" | "System Win" | "Writing") => (e: any) => ({
+const toItem = (type: "Case Study" | "System Win" | "Writing") => (e:any) => ({
   slug: slugify(e.slug ?? e.id ?? e.data.title),
   title: e.data.title,
   summary: e.data.summary,
   type,
   year: e.data.year,
-  category: e.data.category ?? [],
+  streams: e.data.streams ?? [],
+  industries: e.data.industries ?? [],
+  projectTypes: e.data.projectTypes ?? [],
   tags: e.data.tags ?? [],
-  cmi: e.data.cmi ?? [],
-  thumbnail: e.data.thumbnail,
+  thumbnail: e.data.thumbnail
 });
 
 const items = [...cs.map(toItem("Case Study")), ...sw.map(toItem("System Win")), ...wr.map(toItem("Writing"))]
-  .sort((a, b) => b.year - a.year);
+  .sort((a,b)=>b.year-a.year);
 
 const url = new URL(Astro.request.url).toString();
 ---
-<Base title="Portfolio — SMooks" description="Filterable, searchable collection of case studies, systems wins, and writing." canonical={url}>
+<Base title="Portfolio — SMooks" description="Filterable, searchable portfolio: case studies, systems wins, and writing." canonical={url}>
   <header class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
     <h1 class="text-3xl font-bold">Portfolio</h1>
-    <p class="mt-2 text-gray-600">Filter and search across case studies, systems wins, and writing.</p>
+    <p class="mt-2 text-gray-600">Search and filter by type, transformation streams, industry, and project type.</p>
   </header>
   <PortfolioBrowser items={items} />
   <script type="application/json" id="items-data">{JSON.stringify(items)}</script>

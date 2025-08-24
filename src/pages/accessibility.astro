@@ -1,17 +1,10 @@
 ---
 import Base from "@/layouts/Base.astro";
-
 const url = new URL(Astro.request.url).toString();
 ---
-<Base title="Accessibility" canonical={url}>
-  <main class="prose mx-auto py-10">
-    <h1>Accessibility Statement</h1>
-    <p>Committed to WCAG 2.2 AA. Known issues & target dates listed below.</p>
-    <ul>
-      <li>Keyboard focus visible and logical tab order</li>
-      <li>Reduced motion respected</li>
-      <li>Alt text on all media</li>
-    </ul>
-    <p>Report an issue: accessibility@smooks.co.uk</p>
+<Base title="Accessibility — SMooks" description="Accessibility statement for smooks.co.uk" canonical={url}>
+  <main class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold">Accessibility</h1>
+    <p class="mt-3 text-gray-700">I aim for WCAG 2.1 AA: semantic HTML, keyboard operability, and sufficient contrast. If you encounter barriers, email <a class="underline" href="mailto:hello@smooks.co.uk">hello@smooks.co.uk</a>.</p>
   </main>
 </Base>
