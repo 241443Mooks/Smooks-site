@@ -1,0 +1,42 @@
+---
+import PortfolioBrowser from "@/components/PortfolioBrowser.astro";
+import { getCollection } from "astro:content";
+import { slugify } from "@/utils/slugify";
+
+const cs = await getCollection("caseStudies");
+const sw = await getCollection("systemWins");
+const wr = await getCollection("writing");
+
+const toItem = (type: "Case Study" | "System Win" | "Writing") => (e: any) => ({
+  slug: slugify(e.slug ?? e.id ?? e.data.title),
+  title: e.data.title,
+  summary: e.data.summary,
+  type,
+  year: e.data.year,
+  category: e.data.category ?? [],
+  tags: e.data.tags ?? [],
+  cmi: e.data.cmi ?? [],
+  thumbnail: e.data.thumbnail
+});
+
+const items = [
+  ...cs.map(toItem("Case Study")),
+  ...sw.map(toItem("System Win")),
+  ...wr.map(toItem("Writing"))
+].sort((a,b)=> b.year - a.year);
+---
+
+<html lang="en">
+  <head>
+    <title>Portfolio — SMooks</title>
+  </head>
+  <body class="py-8">
+    <header class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold">Portfolio</h1>
+      <p class="mt-2 text-gray-600">Filterable, searchable collection of case studies, systems wins, and writing.</p>
+    </header>
+
+    <PortfolioBrowser items={items} />
+    <script type="application/json" id="items-data">{JSON.stringify(items)}</script>
+  </body>
+</html>
