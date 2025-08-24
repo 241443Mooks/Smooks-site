@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import Base from "@/layouts/Base.astro";
 import { getCollection } from 'astro:content';
 const all = await getCollection('case-studies');
 const byStream = all.reduce((acc, item) => {
@@ -15,8 +15,9 @@ const STREAMS = [
   { key: 'leadership-governance', label: 'Leadership, Strategy & Governance' },
   { key: 'innovation-growth', label: 'Innovation & Growth' },
 ];
+const url = new URL(Astro.request.url).toString();
 ---
-<BaseLayout title="Transformation Streams">
+<Base title="Transformation Streams" canonical={url}>
   <section class="container mx-auto px-4 py-10">
     <h1 class="text-3xl md:text-4xl font-semibold mb-6">Transformation Streams</h1>
     <p class="mb-10 max-w-3xl">Browse case studies by stream. Each story links to CMI Level 7 evidence and metrics.</p>
@@ -29,4 +30,4 @@ const STREAMS = [
       ))}
     </div>
   </section>
-</BaseLayout>
+</Base>

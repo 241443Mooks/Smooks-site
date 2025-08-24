@@ -1,6 +1,17 @@
 ---
-const { title = "SMooks", description = "Strategic Systems Architect & Transformation Leader", canonical, meta = [] } = Astro.props as {
-  title?: string; description?: string; canonical?: string; meta?: {name?:string; property?:string; content:string}[];
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+
+const {
+  title = "SMooks",
+  description = "Strategic Systems Architect & Transformation Leader",
+  canonical,
+  meta = [],
+} = Astro.props as {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  meta?: { name?: string; property?: string; content: string }[];
 };
 ---
 <html lang="en">
@@ -12,7 +23,11 @@ const { title = "SMooks", description = "Strategic Systems Architect & Transform
     {canonical && <link rel="canonical" href={canonical} />}
     {meta.map((m) => <meta {...m} />)}
   </head>
-  <body class="min-h-screen bg-white text-gray-900 antialiased">
-    <slot />
+  <body class="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
+    <SiteHeader />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <SiteFooter />
   </body>
 </html>

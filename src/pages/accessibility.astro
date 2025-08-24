@@ -1,7 +1,9 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Base from "@/layouts/Base.astro";
+
+const url = new URL(Astro.request.url).toString();
 ---
-<Layout title="Accessibility">
+<Base title="Accessibility" canonical={url}>
   <main class="prose mx-auto py-10">
     <h1>Accessibility Statement</h1>
     <p>Committed to WCAG 2.2 AA. Known issues & target dates listed below.</p>
@@ -12,4 +14,4 @@ import Layout from '@/layouts/Layout.astro';
     </ul>
     <p>Report an issue: accessibility@smooks.co.uk</p>
   </main>
-</Layout>
+</Base>

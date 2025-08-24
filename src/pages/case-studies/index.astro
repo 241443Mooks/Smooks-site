@@ -1,46 +1,35 @@
 ---
-export const prerender = true;
-import CaseStudyCard from "../../components/CaseStudyCard.astro";
-import caseStudies from "../../data/caseStudies";
+import Base from "@/layouts/Base.astro";
+import CaseStudyCard from "@/components/CaseStudyCard.astro";
+import caseStudies from "@/data/caseStudies";
 
 const items = [...caseStudies].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
+
+const url = new URL(Astro.request.url).toString();
 ---
+<Base title="Case Studies · SMooks" description="CMI Level 7-aligned case studies demonstrating strategic leadership, change, policy, and systems design." canonical={url}>
+  <main class="mx-auto max-w-6xl px-4 md:px-6 py-10">
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Case Studies</h1>
+      <p class="mt-2 text-zinc-600 dark:text-zinc-300 max-w-3xl">
+        A concise collection mapped to CMI Level 7 units, showcasing strategic change, policy design, data-informed
+        delivery, and systems architecture.
+      </p>
+    </header>
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Case Studies · SMooks</title>
-    <meta
-      name="description"
-      content="CMI Level 7-aligned case studies demonstrating strategic leadership, change, policy, and systems design."
-    />
-  </head>
-  <body class="bg-white dark:bg-black text-zinc-900 dark:text-zinc-50">
-    <main class="mx-auto max-w-6xl px-4 md:px-6 py-10">
-      <header class="mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Case Studies</h1>
-        <p class="mt-2 text-zinc-600 dark:text-zinc-300 max-w-3xl">
-          A concise collection mapped to CMI Level 7 units, showcasing strategic change, policy design, data-informed
-          delivery, and systems architecture.
-        </p>
-      </header>
-
-      <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((cs) => (
-          <CaseStudyCard
-            href={`/case-studies/${cs.slug}/`}
-            title={cs.title}
-            summary={cs.summary}
-            units={cs.units}
-            date={cs.date}
-            tags={cs.tags}
-          />
-        ))}
-      </section>
-    </main>
-  </body>
-  </html>
-
+    <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((cs) => (
+        <CaseStudyCard
+          href={`/case-studies/${cs.slug}/`}
+          title={cs.title}
+          summary={cs.summary}
+          units={cs.units}
+          date={cs.date}
+          tags={cs.tags}
+        />
+      ))}
+    </section>
+  </main>
+</Base>

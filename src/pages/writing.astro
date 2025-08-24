@@ -1,14 +1,13 @@
-
 ---
-// src/pages/writing.astro
-import Layout from "../layouts/BaseLayout.astro";
+import Base from "@/layouts/Base.astro";
 import { getCollection } from "astro:content";
 
 const articles = await getCollection("articles");
 const title = "Writing";
 const description = "Articles and reflections.";
+const url = new URL(Astro.request.url).toString();
 ---
-<Layout {title} {description} currentPath={Astro.url.pathname}>
+<Base {title} {description} canonical={url}>
   <section class="mx-auto max-w-6xl">
     <h1 class="text-3xl md:text-4xl font-semibold">Writing</h1>
     <p class="text-zinc-400 mt-2 max-w-3xl">Essays, reflections, and cross-posts.</p>
@@ -39,4 +38,4 @@ const description = "Articles and reflections.";
       </ul>
     )}
   </section>
-</Layout>
+</Base>

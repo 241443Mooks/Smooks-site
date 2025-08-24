@@ -6,4 +6,11 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.smooks.co.uk',
   integrations: [tailwind(), mdx(), sitemap()],
+  vite: {
+    resolve: {
+      alias: {
+        '@': '/src',
+      },
+    },
+  },
 });

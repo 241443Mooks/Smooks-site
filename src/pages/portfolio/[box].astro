@@ -1,14 +1,11 @@
 ---
-// make sure this page is statically generated
 export const prerender = true;
 
-import Layout from "../../layouts/BaseLayout.astro";
-import { getStreamBySlug, winsForStream, STREAMS } from "../../data/wins";
-import SystemWinsCard from "../../components/SystemWinsCard.astro";
+import Base from "@/layouts/Base.astro";
+import { getStreamBySlug, winsForStream, STREAMS } from "@/data/wins";
+import SystemWinsCard from "@/components/SystemWinsCard.astro";
 
-// 👇 ADD THIS
 export function getStaticPaths() {
-  // Expect STREAMS like: [{ slug: "strategy", name: "...", blurb: "..." }, ...]
   return STREAMS.map((s) => ({ params: { box: s.slug } }));
 }
 
@@ -22,8 +19,9 @@ if (!stream) {
 const wins = winsForStream(stream.name);
 const title = `${stream.name} – Portfolio`;
 const description = stream.blurb;
+const url = new URL(Astro.request.url).toString();
 ---
-<Layout {title} {description} currentPath={Astro.url.pathname}>
+<Base {title} {description} canonical={url}>
   <section class="mx-auto max-w-6xl">
     <a href="/portfolio" class="text-sm text-zinc-400 hover:underline">← Back to Portfolio</a>
     <h1 class="mt-2 text-3xl md:text-4xl font-semibold">{stream.name}</h1>
@@ -49,4 +47,4 @@ const description = stream.blurb;
       </div>
     )}
   </section>
-</Layout>
+</Base>

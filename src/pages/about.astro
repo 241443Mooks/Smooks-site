@@ -1,8 +1,10 @@
-<html lang="en">
-  <head>
-    <title>About — SMooks</title>
-  </head>
-  <body class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+---
+import Base from "@/layouts/Base.astro";
+
+const url = new URL(Astro.request.url).toString();
+---
+<Base title="About — SMooks" canonical={url}>
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
     <h1 class="text-3xl font-bold">About</h1>
     <p class="mt-4 text-gray-700">
       I’m Sharron “SMooks” Mooks — a strategic, systems-focused education leader. I design and deliver scalable,
@@ -17,6 +19,5 @@
     <p class="mt-4 text-gray-700">
       Beyond work, I coach and mentor, love big landscapes, and believe culture changes when systems do.
     </p>
-  </body>
-</html>
-
+  </section>
+</Base>

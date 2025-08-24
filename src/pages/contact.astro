@@ -1,8 +1,10 @@
-<html lang="en">
-  <head>
-    <title>Contact — SMooks</title>
-  </head>
-  <body class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12">
+---
+import Base from "@/layouts/Base.astro";
+
+const url = new URL(Astro.request.url).toString();
+---
+<Base title="Contact — SMooks" canonical={url}>
+  <section class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12">
     <h1 class="text-3xl font-bold">Contact</h1>
     <p class="mt-3 text-gray-700">I welcome strategic conversations, collaborations, and opportunities to scale transformation.</p>
 
@@ -26,6 +28,5 @@
     <div class="mt-6 text-sm text-gray-600">
       Or email me directly: <a class="underline" href="mailto:hello@smooks.co.uk">hello@smooks.co.uk</a>
     </div>
-  </body>
-</html>
-
+  </section>
+</Base>

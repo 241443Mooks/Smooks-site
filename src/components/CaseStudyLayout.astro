@@ -1,4 +1,5 @@
 ---
+import Base from "@/layouts/Base.astro";
 import type { CaseStudy } from "../data/caseStudies";
 
 interface Props {
@@ -57,46 +58,37 @@ const jsonLd = {
     targetName: code,
   })),
 };
+const url = new URL(Astro.request.url).toString();
 ---
+<Base title={`${title} · Case Study · SMooks`} description={summary} canonical={url}>
+  <main class="mx-auto max-w-3xl px-4 md:px-6 py-10">
+    <a href="/case-studies" class="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">&larr; Back to Case Studies</a>
+    <header class="mt-3 mb-6">
+      <h1 class="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
+      <p class="mt-2 text-zinc-600 dark:text-zinc-300">{summary}</p>
+      <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+        {new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "2-digit" })}
+      </p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {units.map((u) => (
+          <span class="text-xs rounded-full px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60">{u}</span>
+        ))}
+      </div>
+    </header>
 
-<html lang="en" class="scroll-pt-24">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title} · Case Study · SMooks</title>
-    <meta name="description" content={summary} />
-    <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-  </head>
-  <body class="bg-white dark:bg-black text-zinc-900 dark:text-zinc-50">
-    <main class="mx-auto max-w-3xl px-4 md:px-6 py-10">
-      <a href="/case-studies" class="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">&larr; Back to Case Studies</a>
-      <header class="mt-3 mb-6">
-        <h1 class="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
-        <p class="mt-2 text-zinc-600 dark:text-zinc-300">{summary}</p>
-        <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          {new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "2-digit" })}
-        </p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          {units.map((u) => (
-            <span class="text-xs rounded-full px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60">{u}</span>
+    <article class="prose prose-zinc dark:prose-invert max-w-none">
+      <div set:html={code} />
+    </article>
+
+    {tags.length ? (
+      <footer class="mt-10 border-t border-zinc-200/60 dark:border-zinc-800/80 pt-6">
+        <div class="flex flex-wrap gap-2">
+          {tags.map((t) => (
+            <span class="text-xs uppercase tracking-wide rounded px-2 py-0.5 bg-zinc-50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50">{t}</span>
           ))}
         </div>
-      </header>
-
-      <article class="prose prose-zinc dark:prose-invert max-w-none">
-        <div set:html={code} />
-      </article>
-
-      {tags.length ? (
-        <footer class="mt-10 border-t border-zinc-200/60 dark:border-zinc-800/80 pt-6">
-          <div class="flex flex-wrap gap-2">
-            {tags.map((t) => (
-              <span class="text-xs uppercase tracking-wide rounded px-2 py-0.5 bg-zinc-50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50">{t}</span>
-            ))}
-          </div>
-        </footer>
-      ) : null}
-    </main>
-  </body>
-  </html>
-
+      </footer>
+    ) : null}
+  </main>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Base>
