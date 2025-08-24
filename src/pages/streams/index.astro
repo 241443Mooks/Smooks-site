@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from 'astro:content';
+const all = await getCollection('case-studies');
+const byStream = all.reduce((acc, item) => {
+  const s = item.data.stream; (acc[s] ||= []).push(item);
+  return acc;
+}, {} as Record<string, typeof all>);
+const STREAMS = [
+  { key: 'tech-digital', label: 'Technology & Digital Transformation' },
+  { key: 'people-culture', label: 'People, Culture & Community' },
+  { key: 'systems-automation', label: 'Systems & Automation' },
+  { key: 'ops-modernisation', label: 'Operational Efficiency & Modernisation' },
+  { key: 'education-learning', label: 'Education & Learning' },
+  { key: 'leadership-governance', label: 'Leadership, Strategy & Governance' },
+  { key: 'innovation-growth', label: 'Innovation & Growth' },
+];
+---
+<BaseLayout title="Transformation Streams">
+  <section class="container mx-auto px-4 py-10">
+    <h1 class="text-3xl md:text-4xl font-semibold mb-6">Transformation Streams</h1>
+    <p class="mb-10 max-w-3xl">Browse case studies by stream. Each story links to CMI Level 7 evidence and metrics.</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {STREAMS.map(s => (
+        <a href={`/streams/${s.key}`} class="block rounded-2xl p-6 shadow-sm hover:shadow-md transition border border-gray-200 bg-white dark:bg-zinc-900">
+          <h2 class="text-xl font-medium mb-2">{s.label}</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">{byStream[s.key]?.length ?? 0} case studies</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

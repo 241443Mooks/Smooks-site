@@ -1,0 +1,31 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const entries = await getCollection('case-studies');
+const UNITS = ['701','702','703','704','705','706','707','708','709','710','711','712','713','714','715','716'];
+---
+<BaseLayout title="Portfolio × CMI Matrix">
+  <section class="container mx-auto px-4 py-10">
+    <h1 class="text-3xl md:text-4xl font-semibold mb-6">Portfolio × CMI Evidence Matrix</h1>
+    <div class="overflow-x-auto border rounded-2xl">
+      <table class="min-w-[900px] w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-zinc-900">
+          <tr>
+            <th class="text-left p-3">Project</th>
+            {UNITS.map(u => <th class="p-3 text-center">{u}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {entries.map(e => (
+            <tr class="border-t">
+              <td class="p-3"><a href={`/case-studies/${e.slug}`} class="underline">{e.data.title}</a></td>
+              {UNITS.map(u => (
+                <td class="p-3 text-center">{e.data.cmi_units?.includes(u) ? '✅' : ''}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</BaseLayout>
