@@ -4,24 +4,31 @@ export type PortfolioItem = {
   summary: string;
   type: "Case Study" | "System Win" | "Writing";
   year: number;
-  category: string[];
+  streams: string[];
+  industries: string[];
+  projectTypes: string[];
   tags: string[];
-  cmi: string[];
   thumbnail?: string;
 };
 
-export const makeIndex = async (items: PortfolioItem[]) => {
-  const { default: Fuse } = await import(
-    "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.min.js"
-  );
-  return new Fuse(items, {
-    keys: [
-      { name: "title", weight: 0.5 },
-      { name: "summary", weight: 0.3 },
-      { name: "tags", weight: 0.15 },
-      { name: "category", weight: 0.05 },
-    ],
-    includeScore: true,
-    threshold: 0.34,
-  });
-};
+// lightweight search index without external deps
+export const makeIndex = (items: PortfolioItem[]) => ({
+  search(query: string) {
+    const q = query.toLowerCase();
+    return items
+      .map((item) => {
+        const text = [
+          item.title,
+          item.summary,
+          ...item.tags,
+          ...item.streams,
+          ...item.industries,
+          ...item.projectTypes,
+        ]
+          .join(" ")
+          .toLowerCase();
+        return text.includes(q) ? { item, score: 0 } : null;
+      })
+      .filter(Boolean) as { item: PortfolioItem; score: number }[];
+  },
+});

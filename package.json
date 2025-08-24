@@ -6,7 +6,8 @@
     "dev": "astro dev --host --port 4321",
     "build": "astro build",
     "preview": "astro preview --host --port 4321",
-    "astro": "astro"
+    "astro": "astro",
+    "codemod:meta": "node scripts/update-meta.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

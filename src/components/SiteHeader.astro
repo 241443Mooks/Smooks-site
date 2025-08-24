@@ -1,34 +1,25 @@
 ---
-/* src/components/SiteHeader.astro */
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+const current = Astro.url.pathname.replace(new RegExp("/+" + "$"), "") || "/";
 ---
 <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
-  <div class="mx-auto max-w-6xl px-6 md:px-8 h-16 flex items-center justify-between">
-    <a href="/" class="font-heading text-lg md:text-xl font-semibold no-underline">SMooks</a>
-    <nav class="hidden md:flex gap-6">
-      <a href="/streams">Streams</a>
-      <a href="/portfolio">Portfolio</a>
-      <a href="/case-studies">Case Studies</a>
-      <a href="/system-wins">Systems Wins</a>
-      <a href="/playbooks">Playbooks</a>
-      <a href="/writing">Writing</a>
-      <a href="/about">About</a>
-      <a href="/evidence/matrix">Matrix</a>
-    </nav>
-    <div class="flex items-center gap-3">
-      <a href="/contact" class="btn btn-secondary">Contact</a>
-
-      <!-- Theme toggle (no framework) -->
-      <button id="theme-toggle" class="btn btn-secondary" aria-label="Toggle theme">
-        <span class="sr-only">Toggle dark mode</span> 🌓
-      </button>
-      <script>
-        const btn = document.getElementById('theme-toggle');
-        btn?.addEventListener('click', () => {
-          const el = document.documentElement;
-          const isDark = el.classList.toggle('dark');
-          localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-      </script>
-    </div>
-  </div>
+  <nav class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <a href="/" class="font-bold">SMooks</a>
+    <ul class="flex gap-5">
+      {links.map(l => (
+        <li>
+          <a
+            href={l.href}
+            aria-current={current===l.href ? "page" : undefined}
+            class={`hover:underline ${current===l.href ? "font-semibold underline" : ""}`}
+          >{l.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
 </header>
