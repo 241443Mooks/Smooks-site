@@ -1,41 +1,68 @@
 ---
-// src/pages/writing/[slug].astro
-export const prerender = true;
-
-import Layout from "../../layouts/BaseLayout.astro";
+import Base from "@/layouts/Base.astro";
 import { getCollection } from "astro:content";
+import RelatedContent from "@/components/RelatedContent.astro";
+import { slugify } from "@/utils/slugify";
+import { buildPieceMeta, pieceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export async function getStaticPaths() {
-  // returns [] if the collection exists but is empty — which is fine
-  const entries = await getCollection("articles");
-  return entries.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
-  }));
+  const entries = await getCollection("writing");
+  return entries.map((e) => ({ params: { slug: slugify(e.slug ?? e.id ?? e.data.title) } }));
 }
 
-const { entry } = Astro.props as { entry: any };
+const all = await getCollection("writing");
+const slug = Astro.params.slug!;
+const entry = all.find((e) => slugify(e.slug ?? e.id ?? e.data.title) === slug);
+if (!entry) throw new Error("Not found");
+
 const { Content } = await entry.render();
-
-const title = entry.data.title ?? `Article: ${entry.slug}`;
-const description = entry.data.summary ?? "Article";
+const url = new URL(Astro.request.url);
+const meta = buildPieceMeta({
+  title: `${entry.data.title} — Writing | SMooks`,
+  description: entry.data.summary,
+  url: url.toString(),
+  type: "article",
+  image: entry.data.thumbnail,
+});
 ---
-<Layout {title} {description} currentPath={Astro.url.pathname}>
-  <section class="mx-auto max-w-3xl">
-    <a href="/writing" class="text-sm text-zinc-400 hover:underline">← Back to Writing</a>
-    <h1 class="mt-2 text-3xl md:text-4xl font-semibold">{title}</h1>
-    {entry.data.summary && <p class="mt-2 text-zinc-400">{entry.data.summary}</p>}
 
-    <article class="prose prose-invert max-w-none mt-8">
-      <Content />
-    </article>
+<Base title={meta.title} description={meta.description} canonical={meta.canonical} meta={meta.meta}>
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <nav class="mb-6 text-sm text-gray-600">
+      <a href="/">Home</a> · <a href="/writing">Writing</a> · <span class="text-gray-900">{entry.data.title}</span>
+    </nav>
 
-    {entry.data.tags?.length > 0 && (
-      <div class="mt-8 flex flex-wrap gap-2">
-        {entry.data.tags.map((t: string) => (
-          <span class="text-[11px] px-2 py-1 rounded-full bg-white/5 border border-white/10">{t}</span>
-        ))}
+    <header>
+      <div class="text-sm text-gray-500">{entry.data.year} · Writing</div>
+      <h1 class="mt-1 text-3xl font-bold">{entry.data.title}</h1>
+      <p class="mt-3 text-gray-700">{entry.data.summary}</p>
+      {entry.data.canonical && <div class="mt-2 text-sm"><a class="underline" href={entry.data.canonical}>Original publication</a></div>}
+      <div class="mt-4 flex flex-wrap gap-1">
+        {(entry.data.tags ?? []).map((t:string) => <span class="rounded-full bg-gray-50 border px-2 py-0.5 text-xs">#{t}</span>)}
       </div>
-    )}
-  </section>
-</Layout>
+    </header>
+
+    <div class="prose prose-zinc mt-8 max-w-none">
+      <Content />
+    </div>
+
+    <RelatedContent currentSlug={slug} currentType="Writing" tags={entry.data.tags} year={entry.data.year} />
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(pieceJsonLd({
+    title: entry.data.title,
+    description: entry.data.summary,
+    url: meta.canonical,
+    image: entry.data.thumbnail,
+    datePublished: entry.data.publishedAt,
+    dateModified: entry.data.updatedAt,
+    keywords: entry.data.keywords,
+    authorName: "Sharron Mooks",
+    type: "BlogPosting",
+  }))}/>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd([
+    { name: "Home", url: new URL("/", url).toString() },
+    { name: "Writing", url: new URL("/writing", url).toString() },
+    { name: entry.data.title, url: meta.canonical },
+  ]))}/>
+</Base>
