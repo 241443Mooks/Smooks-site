@@ -1,34 +1,104 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Button from "../components/Button.astro";
-import Card from "../components/Card.astro";
-import Tag from "../components/Tag.astro";
+import { getCollection } from "astro:content";
+import { slugify } from "@/utils/slugify";
+
+const cs = await getCollection("caseStudies");
+const sw = await getCollection("systemWins");
+const wr = await getCollection("writing");
+
+const spotlight = cs.find(c => c.data.featured) ?? cs[0];
+const wins = sw.slice(0, 3);
+const posts = wr.slice(0, 3);
 ---
-<BaseLayout title="SMooks — Systems that let people shine">
-  <section class="py-10 md:py-16">
-    <p class="text-sm text-[color:var(--color-muted)] mb-3">Sharron Mooks</p>
-    <h1>I build systems that save time, cut waste, and create space for people to shine.</h1>
-    <div class="mt-6 flex flex-wrap gap-3">
-      <Button href="/system-wins">Explore Systems Wins</Button>
-      <Button variant="secondary" href="https://www.linkedin.com/in/sharronmooks">Connect on LinkedIn</Button>
-    </div>
-  </section>
 
-  <section class="grid md:grid-cols-2 gap-8">
-    <Card>
-      <div class="flex items-center gap-3 mb-4">
-        <Tag tone="accent" label="Case Study" />
-        <span class="text-sm text-[color:var(--color-muted)]">Adopted by 7 schools</span>
+<html lang="en">
+  <head>
+    <title>Sharron Mooks — Strategic Systems Architect & Transformation Leader</title>
+    <meta name="description" content="I design and deliver scalable systems that save time, restore trust, and unlock potential — turning complexity into clarity across education and beyond." />
+  </head>
+  <body>
+    <!-- Hero -->
+    <section class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+        Sharron Mooks — Strategic Systems Architect & Transformation Leader
+      </h1>
+      <p class="mt-4 text-lg text-gray-700 max-w-3xl">
+        I design and deliver scalable systems that save time, restore trust, and unlock potential — turning complexity into clarity across education and beyond.
+      </p>
+      <div class="mt-6 flex gap-3">
+        <a href="/portfolio" class="rounded-2xl bg-gray-900 text-white px-5 py-3 font-medium">Explore Portfolio</a>
+        <a href="/contact" class="rounded-2xl border px-5 py-3 font-medium">Contact Me</a>
       </div>
-      <h2 class="mb-2">Regional Staff Awards — Built by Students</h2>
-      <p class="mb-4">Nomination platform + automated reporting + live dashboards. 1,000+ submissions in week one.</p>
-      <Button href="/system-wins/awards">Read the full story</Button>
-    </Card>
+    </section>
 
-    <Card>
-      <h3 class="mb-2">AI Policy → usable guardrails</h3>
-      <p class="mb-4">Balanced risk, opportunity, and practicality across education, operations, and support.</p>
-      <Button variant="secondary" href="/playbooks/ai-policy">View playbook</Button>
-    </Card>
-  </section>
-</BaseLayout>
+    <!-- Who I Am -->
+    <section class="bg-gray-50">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-2xl font-bold">Who I Am</h2>
+        <p class="mt-3 max-w-3xl text-gray-700">
+          From classroom to boardroom: I lead digital transformation that’s practical, measurable, and humane. My work blends systems architecture, policy, and delivery—so change sticks.
+        </p>
+      </div>
+    </section>
+
+    <!-- Spotlight Case Study -->
+    {spotlight && (
+      <section class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-2xl font-bold">Spotlight</h2>
+        <a href={`/portfolio/${slugify(spotlight.slug ?? spotlight.id ?? spotlight.data.title)}`} class="mt-4 block rounded-2xl border p-6 hover:shadow-lg transition">
+          <div class="flex flex-col gap-4 md:flex-row">
+            {spotlight.data.thumbnail && <img src={spotlight.data.thumbnail} alt="" class="md:w-1/3 rounded-xl object-cover" />}
+            <div class="flex-1">
+              <div class="text-sm text-gray-500">{spotlight.data.year} · Case Study</div>
+              <h3 class="mt-1 text-xl font-semibold">{spotlight.data.title}</h3>
+              <p class="mt-2 text-gray-700">{spotlight.data.summary}</p>
+              {spotlight.data.outcome?.length ? (
+                <ul class="mt-3 flex flex-wrap gap-3 text-sm">
+                  {spotlight.data.outcome.slice(0,3).map((o:any) => <li class="rounded-full bg-gray-100 px-3 py-1">{o.label}: <strong>{o.value}</strong></li>)}
+                </ul>
+              ) : null}
+            </div>
+          </div>
+        </a>
+      </section>
+    )}
+
+    <!-- Systems Wins -->
+    <section class="bg-gray-50">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold">Systems Wins</h2>
+          <a href="/portfolio" class="text-sm font-medium underline">See all</a>
+        </div>
+        <div class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {wins.map((w:any) => (
+            <a href={`/system-wins/${slugify(w.slug ?? w.id ?? w.data.title)}`} class="block rounded-2xl border p-5 hover:shadow-lg transition">
+              <div class="text-sm text-gray-500">{w.data.year} · System Win</div>
+              <h3 class="mt-1 text-lg font-semibold">{w.data.title}</h3>
+              <p class="mt-2 text-gray-700">{w.data.summary}</p>
+              {w.data.metric && <div class="mt-2 text-sm text-gray-900 font-medium">{w.data.metric}</div>}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Writing -->
+    <section class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">Writing & Thought Leadership</h2>
+        <a href="/writing" class="text-sm font-medium underline">See all</a>
+      </div>
+      <div class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p:any) => (
+          <a href={`/writing/${slugify(p.slug ?? p.id ?? p.data.title)}`} class="block rounded-2xl border p-5 hover:shadow-lg transition">
+            <div class="text-sm text-gray-500">{p.data.year} · Writing</div>
+            <h3 class="mt-1 text-lg font-semibold">{p.data.title}</h3>
+            <p class="mt-2 text-gray-700">{p.data.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </body>
+</html>
+
