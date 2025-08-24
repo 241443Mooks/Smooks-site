@@ -3,7 +3,7 @@ import Base from "@/layouts/Base.astro";
 import SEO from "@/components/SEO.astro";
 import { getCollection } from "astro:content";
 
-const wins = (await getCollection("wins")).sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
+const wins = (await getCollection("systemWins")).sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
 const url = new URL(Astro.request.url).toString();
 ---
 <Base title="Systems Wins — SMooks" description="Measurable, repeatable improvements with data and governance." canonical={url}>
