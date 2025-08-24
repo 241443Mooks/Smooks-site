@@ -1,0 +1,112 @@
+---
+import type { PortfolioItem } from "@/lib/search/fuse";
+const { items } = Astro.props as { items: PortfolioItem[] };
+---
+
+<section class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-6 grid gap-4 md:grid-cols-4">
+    <input id="q" type="search" placeholder="Search title, summary, tags…" class="md:col-span-2 w-full rounded-2xl border px-4 py-3" />
+    <select id="type" class="rounded-2xl border px-4 py-3">
+      <option value="">All types</option>
+      <option>Case Study</option>
+      <option>System Win</option>
+      <option>Writing</option>
+    </select>
+    <select id="year" class="rounded-2xl border px-4 py-3">
+      <option value="">All years</option>
+    </select>
+  </div>
+
+  <div class="mb-4 flex flex-wrap gap-2" id="chips"></div>
+
+  <div id="results" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+</section>
+
+<script type="module" client:load>
+  import { makeIndex } from "@/lib/search/fuse";
+
+  const raw = JSON.parse(decodeURIComponent(new URLSearchParams(location.search).get("items") ?? "[]"));
+  /** @type {import('@/lib/search/fuse').PortfolioItem[]} */
+  const all = raw.length ? raw : JSON.parse(document.getElementById("items-data").textContent);
+
+  const $q = document.getElementById("q");
+  const $type = document.getElementById("type");
+  const $year = document.getElementById("year");
+  const $chips = document.getElementById("chips");
+  const $results = document.getElementById("results");
+
+  // derive facets
+  const years = [...new Set(all.map(i => i.year))].sort((a,b)=>b-a);
+  years.forEach(y => {
+    const opt = document.createElement("option");
+    opt.value = String(y); opt.textContent = String(y);
+    $year.appendChild(opt);
+  });
+
+  // tag chips from top 15 tags
+  const tagCounts = all.flatMap(i => i.tags).reduce((m,t)=> (m[t]=(m[t]??0)+1, m), {});
+  const topTags = Object.entries(tagCounts).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([t])=>t);
+  const activeTags = new Set();
+
+  topTags.forEach(tag => {
+    const b = document.createElement("button");
+    b.className = "rounded-full border px-3 py-1 text-sm hover:bg-gray-50 data-[on=true]:bg-gray-900 data-[on=true]:text-white";
+    b.textContent = `#${tag}`;
+    b.dataset.tag = tag;
+    b.addEventListener("click", () => {
+      if (activeTags.has(tag)) activeTags.delete(tag); else activeTags.add(tag);
+      b.dataset.on = activeTags.has(tag) ? "true" : "false";
+      render();
+    });
+    $chips.appendChild(b);
+  });
+
+  const fuse = makeIndex(all);
+
+  function filterBase(list){
+    return list.filter(i =>
+      (!$type.value || i.type === $type.value) &&
+      (!$year.value || String(i.year) === $year.value) &&
+      (activeTags.size === 0 || i.tags.some(t => activeTags.has(t)))
+    );
+  }
+
+  function render(){
+    let list = all;
+    const q = $q.value?.trim();
+    if (q) {
+      list = fuse.search(q).map(r => r.item);
+    }
+    list = filterBase(list);
+
+    $results.innerHTML = "";
+    if (!list.length) {
+      $results.innerHTML = `<div class="col-span-full text-gray-500">No results. Try clearing filters.</div>`;
+      return;
+    }
+
+    for (const i of list) {
+      const card = document.createElement("a");
+      card.href = `/${i.type === "Writing" ? "writing" : i.type === "System Win" ? "system-wins" : "portfolio"}/${i.slug}`;
+      card.className = "block rounded-2xl border hover:shadow-lg transition p-4";
+      card.innerHTML = `
+        ${i.thumbnail ? `<img src="${i.thumbnail}" alt="" class="mb-3 aspect-video w-full rounded-xl object-cover">` : ""}
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wide text-gray-500">${i.type}</span>
+          <span class="text-xs text-gray-500">${i.year}</span>
+        </div>
+        <h3 class="mt-1 text-lg font-semibold">${i.title}</h3>
+        <p class="mt-1 text-sm text-gray-600">${i.summary}</p>
+        <div class="mt-3 flex flex-wrap gap-1">
+          ${i.tags.slice(0,4).map(t=>`<span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs">#${t}</span>`).join("")}
+        </div>
+      `;
+      $results.appendChild(card);
+    }
+  }
+
+  [$q, $type, $year].forEach(el => el.addEventListener("input", render));
+  render();
+</script>
+
+<script type="application/json" id="items-data">{/* injected server-side */}</script>
