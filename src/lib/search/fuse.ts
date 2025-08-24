@@ -1,5 +1,3 @@
-import Fuse from "fuse.js";
-
 export type PortfolioItem = {
   slug: string;
   title: string;
@@ -12,8 +10,11 @@ export type PortfolioItem = {
   thumbnail?: string;
 };
 
-export const makeIndex = (items: PortfolioItem[]) =>
-  new Fuse(items, {
+export const makeIndex = async (items: PortfolioItem[]) => {
+  const { default: Fuse } = await import(
+    "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.min.js"
+  );
+  return new Fuse(items, {
     keys: [
       { name: "title", weight: 0.5 },
       { name: "summary", weight: 0.3 },
@@ -23,3 +24,4 @@ export const makeIndex = (items: PortfolioItem[]) =>
     includeScore: true,
     threshold: 0.34,
   });
+};

@@ -61,7 +61,8 @@ const { items } = Astro.props as { items: PortfolioItem[] };
     $chips.appendChild(b);
   });
 
-  const fuse = makeIndex(all);
+  let fuse; 
+  makeIndex(all).then(f => { fuse = f; render(); });
 
   function filterBase(list){
     return list.filter(i =>
@@ -74,7 +75,7 @@ const { items } = Astro.props as { items: PortfolioItem[] };
   function render(){
     let list = all;
     const q = $q.value?.trim();
-    if (q) {
+    if (q && fuse) {
       list = fuse.search(q).map(r => r.item);
     }
     list = filterBase(list);
