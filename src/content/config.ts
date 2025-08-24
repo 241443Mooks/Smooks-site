@@ -46,4 +46,36 @@ const writing = defineCollection({
   }),
 });
 
-export const collections = { caseStudies, systemWins, writing };
+const portfolio = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    slug: z.string().optional(),
+    date: z.date(),
+    type: z.enum(["system-win", "case-study", "writing"]),
+    streams: z.array(
+      z.enum([
+        "Technology & Digital Transformation",
+        "Governance & Risk",
+        "Operational Excellence",
+        "People & Culture",
+        "Teaching & Learning",
+        "Data & Analytics",
+      ])
+    ).default([]),
+    industry: z.array(z.string()).default(["Education"]),
+    projectType: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    cmiUnits: z.array(z.string()).default([]),
+    summary: z.string(),
+    metrics: z
+      .array(z.object({ label: z.string(), value: z.string() }))
+      .default([]),
+    featured: z.boolean().default(false),
+    cover: z.string().optional(),
+    externalUrl: z.string().optional(),
+    published: z.boolean().default(true),
+  }),
+});
+
+export const collections = { caseStudies, systemWins, writing, portfolio };
